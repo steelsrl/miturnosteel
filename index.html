@@ -264,7 +264,9 @@
   async function getPass(){ const p=await fbGet('config/pass'); return p||'admin123'; }
   async function getWspNumber(){ const n=await fbGet('config/wspNumber'); return n||''; }
 
-  // Turno bloqueado si: ya empezó, o faltan menos de 2hs para que empiece, o es el primer turno y son >= 17hs del día anterior
+  // Turno bloqueado si: ya empezó, o faltan menos de 2hs para que empiece
+  // Excepción: último turno (14:30-16:30) se puede cargar hasta las 15:00
+  // Primer turno del día siguiente se bloquea desde las 17hs del día anterior
   function turnoEsBloqueado(ds, turnoIdx){
     const now = new Date();
     const hoy = dateStr(now);
@@ -272,17 +274,27 @@
     const t = TURNOS_DEF[turnoIdx];
 
     if(ds === hoy){
-      // bloquear si ya empezó o si faltan menos de 2hs para que empiece
+      if(turnoIdx === 3){
+        // último turno: bloquear desde las 15:00
+        return ahora >= 15*60;
+      }
+      // demás turnos: bloquear 2hs antes del inicio
       return ahora >= (t.inicio - BLOQUEO_ANTICIPADO);
     }
 
-    // para días futuros: bloquear primer turno si hoy es el día anterior y son >= 17hs
+    // para días futuros: primer turno del día siguiente
+    // disponible solo entre 15:00 y 16:45 del día anterior
     if(turnoIdx === 0){
       const dTarget = new Date(ds+'T12:00:00');
       const dAnterior = new Date(dTarget);
       dAnterior.setDate(dAnterior.getDate()-1);
       const dsAnterior = dateStr(dAnterior);
-      if(hoy === dsAnterior && ahora >= 17*60) return true;
+      if(hoy === dsAnterior){
+        // antes de las 15:00 → bloqueado
+        if(ahora < 15*60) return true;
+        // después de las 16:45 → bloqueado
+        if(ahora >= 16*60+45) return true;
+      }
     }
     return false;
   }
