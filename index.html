@@ -30,13 +30,14 @@
     .hint-box svg { width: 16px; height: 16px; stroke: var(--accent); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; margin-top: 2px; }
     .hint-box p { font-size: 12.5px; color: var(--accent); line-height: 1.55; } .hint-box strong { font-weight: 600; }
     label { font-size: 13px; color: var(--text-secondary); display: block; margin-bottom: 6px; }
-    input[type=text], input[type=password], input[type=number] { width: 100%; padding: 9px 12px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); font-size: 15px; font-family: inherit; color: var(--text-primary); background: var(--surface); outline: none; transition: border-color 0.15s; margin-bottom: 0; }
+    input[type=text], input[type=password], input[type=number], input[type=month] { width: 100%; padding: 9px 12px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); font-size: 14px; font-family: inherit; color: var(--text-primary); background: var(--surface); outline: none; transition: border-color 0.15s; }
     input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(29,111,184,0.12); }
     .msg-err { font-size: 12.5px; color: var(--danger); margin-top: 6px; display: none; }
     button.primary { width: 100%; padding: 11px; background: var(--accent); color: white; border: none; border-radius: var(--radius-sm); font-size: 14px; font-weight: 500; font-family: inherit; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 7px; }
     button.primary:hover { background: #165d9e; }
     button.secondary { background: transparent; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 8px 14px; font-size: 13px; font-family: inherit; color: var(--text-primary); cursor: pointer; }
-    button.danger { background: transparent; border: 1px solid #e8b0aa; border-radius: var(--radius-sm); padding: 7px 13px; font-size: 12.5px; font-family: inherit; color: var(--danger); cursor: pointer; }
+    button.danger-btn { background: transparent; border: 1px solid #e8b0aa; border-radius: var(--radius-sm); padding: 7px 13px; font-size: 12.5px; font-family: inherit; color: var(--danger); cursor: pointer; }
+    .field-gap { margin-top: 12px; }
     .dias-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 4px; }
     .dia-btn { border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 9px 4px; text-align: center; cursor: pointer; background: var(--surface); user-select: none; }
     .dia-btn:hover { border-color: var(--accent); background: var(--accent-light); }
@@ -53,40 +54,39 @@
     .turno-cap { font-size: 11px; color: var(--danger); margin-top: 3px; }
     .card-disabled { opacity: 0.45; pointer-events: none; }
     .result-card { background: var(--success-light); border: 1px solid var(--success-border); border-radius: var(--radius); padding: 1.5rem; text-align: center; margin-bottom: 0.75rem; }
-    .res-hora { font-size: 28px; font-weight: 600; color: var(--success); margin: 6px 0 4px; }
+    .res-hora { font-size: 26px; font-weight: 600; color: var(--success); margin: 6px 0 4px; }
     .res-dia { font-size: 14px; font-weight: 500; } .res-tip { font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
     .wsp-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: #25D366; color: white; border: none; border-radius: var(--radius-sm); padding: 11px; font-size: 14px; font-weight: 500; font-family: inherit; cursor: pointer; width: 100%; margin-top: 10px; }
     .wsp-btn svg { width: 18px; height: 18px; fill: white; flex-shrink: 0; }
     .small-link { font-size: 12px; color: var(--accent); cursor: pointer; text-decoration: underline; }
     .center { text-align: center; } .mt1 { margin-top: 0.75rem; } .mt2 { margin-top: 1.25rem; }
-    .nav-tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 1.25rem; }
-    .tab { padding: 8px 16px; font-size: 13px; cursor: pointer; color: var(--text-secondary); border-bottom: 2px solid transparent; font-family: inherit; background: none; border-top: none; border-left: none; border-right: none; }
+    .nav-tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 1.25rem; overflow-x: auto; }
+    .tab { padding: 8px 14px; font-size: 13px; cursor: pointer; color: var(--text-secondary); border-bottom: 2px solid transparent; font-family: inherit; background: none; border-top: none; border-left: none; border-right: none; white-space: nowrap; }
     .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
     .turno-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
     .turno-row:last-child { border-bottom: none; }
     .badge { display: inline-block; font-size: 11px; padding: 2px 9px; border-radius: 99px; background: var(--success-light); color: var(--success); font-weight: 500; }
     .slot-row { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
     .slot-row:last-child { border-bottom: none; }
-    .slot-row input { width: 58px; text-align: center; font-size: 14px; padding: 5px 8px; }
+    .slot-row input { width: 58px; text-align: center; }
     .feriado-tag { display: inline-flex; align-items: center; gap: 6px; background: var(--warning-light); color: var(--warning-text); border: 1px solid var(--warning-border); border-radius: var(--radius-sm); padding: 4px 10px; font-size: 12px; margin: 3px; }
     .feriado-tag button { background: none; border: none; cursor: pointer; color: var(--warning-text); font-size: 15px; padding: 0; line-height: 1; font-family: inherit; }
     .empty { text-align: center; color: var(--text-hint); font-size: 13px; padding: 2rem 0; }
     .loading { text-align: center; color: var(--text-hint); font-size: 13px; padding: 1rem 0; }
     .admin-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
     .admin-header h2 { font-size: 15px; font-weight: 600; } .admin-header p { font-size: 12px; color: var(--text-secondary); }
-    .field-gap { margin-top: 12px; }
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; z-index: 100; }
+    .modal-box { background: var(--surface); border-radius: var(--radius); padding: 1.5rem; width: 90%; max-width: 360px; box-shadow: 0 8px 32px rgba(0,0,0,0.18); }
+    .modal-title { font-size: 14px; font-weight: 600; margin-bottom: 12px; }
+    .modal-btns { display: flex; gap: 8px; margin-top: 14px; }
+    .modal-btns button { flex: 1; }
+    .resumen-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 1rem; }
+    .resumen-item { text-align: center; padding: 10px 6px; background: var(--bg); border-radius: var(--radius-sm); }
+    .resumen-num { font-size: 22px; font-weight: 600; color: var(--accent); }
+    .resumen-lbl { font-size: 11px; color: var(--text-hint); margin-top: 2px; }
+    .hist-row { padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+    .hist-row:last-child { border-bottom: none; }
     footer { margin-top: 2.5rem; font-size: 11px; color: var(--text-hint); text-align: center; }
-    .modal-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.45); display:flex; align-items:center; justify-content:center; z-index:100; }
-    .modal-box { background:var(--surface); border-radius:var(--radius); padding:1.5rem; width:90%; max-width:360px; box-shadow:0 8px 32px rgba(0,0,0,0.18); }
-    .modal-title { font-size:14px; font-weight:600; margin-bottom:12px; }
-    .modal-btns { display:flex; gap:8px; margin-top:14px; }
-    .modal-btns button { flex:1; }
-    .hist-row { padding:10px 0; border-bottom:1px solid var(--border); font-size:13px; }
-    .hist-row:last-child { border-bottom:none; }
-    .resumen-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
-    .resumen-item { text-align:center; padding:10px 6px; background:var(--bg); border-radius:var(--radius-sm); }
-    .resumen-num { font-size:22px; font-weight:600; color:var(--accent); }
-    .resumen-lbl { font-size:11px; color:var(--text-hint); margin-top:2px; }
   </style>
 </head>
 <body>
@@ -98,6 +98,7 @@
   </div>
 
   <div class="container">
+
     <!-- CLIENTE -->
     <div id="screen-client" class="screen active">
       <div id="client-form">
@@ -107,22 +108,22 @@
             <svg viewBox="0 0 24 24"><path d="M3 9h18M3 15h18M8 3v18M16 3v18M3 3h18v18H3z"/></svg>
             <p>Ingresá el número que aparece al <strong>final de tu factura, junto al código de barras</strong>.</p>
           </div>
-          <label for="comp-input">Número de pedido</label>
+          <label>Número de pedido</label>
           <input type="text" id="comp-input" placeholder="Ej: 123456" inputmode="numeric" autocomplete="off" />
           <p class="msg-err" id="err-comp">Ingresá el número de pedido.</p>
           <div class="field-gap">
-            <label for="facturado-input">Facturado a</label>
+            <label>Facturado a</label>
             <input type="text" id="facturado-input" placeholder="Nombre en la factura" autocomplete="off" />
             <p class="msg-err" id="err-facturado">Ingresá el nombre en la factura.</p>
           </div>
           <div class="field-gap">
-            <label for="retira-input">Retirado por</label>
-            <input type="text" id="retira-input" placeholder="Nombre de quien viene a retirar (opcional)" autocomplete="off" />
+            <label>Retirado por <span style="color:var(--text-hint);font-size:11px;">(opcional)</span></label>
+            <input type="text" id="retira-input" placeholder="Nombre de quien viene a retirar" autocomplete="off" />
           </div>
         </div>
         <div class="card">
           <div class="step-label">Paso 2 — Elegí el día</div>
-          <div class="dias-grid" id="dias-grid"></div>
+          <div class="dias-grid" id="dias-grid"><div class="loading">Cargando...</div></div>
           <p class="msg-err" id="err-dia">Seleccioná un día para continuar.</p>
         </div>
         <div class="card card-disabled" id="card-turnos">
@@ -142,10 +143,10 @@
           <div style="font-size:13px;color:var(--success);">Tu turno de retiro</div>
           <div class="res-hora" id="res-hora">—</div>
           <div class="res-dia" id="res-dia">—</div>
-          <div class="res-tip" id="res-tip"></div>
+          <div class="res-tip">Pasá a retirarlo dentro de la franja horaria seleccionada.</div>
         </div>
         <div class="card">
-          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:6px;">Pedido n.º <strong id="res-comp" style="color:var(--text-primary);"></strong></div>
+          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:4px;">Pedido n.º <strong id="res-comp" style="color:var(--text-primary);"></strong></div>
           <div style="font-size:13px;color:var(--text-secondary);margin-bottom:4px;">Facturado a: <strong id="res-facturado" style="color:var(--text-primary);"></strong></div>
           <div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px;">Retira: <strong id="res-retira" style="color:var(--text-primary);"></strong></div>
           <div style="font-size:13px;color:var(--text-secondary);line-height:1.6;">Tu pedido estará listo al final del turno. Pasá a retirarlo por el galpón, 25 de Mayo 2024.</div>
@@ -162,7 +163,7 @@
     <div id="screen-login" class="screen">
       <div class="card">
         <div style="font-size:15px;font-weight:600;margin-bottom:16px;">Administración</div>
-        <label for="pass-input">Contraseña</label>
+        <label>Contraseña</label>
         <input type="password" id="pass-input" placeholder="••••••••" />
         <p class="msg-err" id="err-pass">Contraseña incorrecta.</p>
         <button class="primary" style="margin-top:12px;" onclick="doLogin()">Ingresar</button>
@@ -181,10 +182,12 @@
         <button class="tab" onclick="switchTab('tab-historial',this)">Historial</button>
         <button class="tab" onclick="switchTab('tab-config',this)">Configuración</button>
       </div>
+
+      <!-- Tab turnos -->
       <div id="tab-turnos">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
           <span style="font-size:13px;color:var(--text-secondary);">Filtrar:</span>
-          <select id="filtro-turno" onchange="renderTurnos()" style="font-size:13px;padding:5px 8px;border-radius:6px;border:1px solid var(--border-strong);background:var(--surface);color:var(--text-primary);cursor:pointer;font-family:inherit;">
+          <select id="filtro-turno" onchange="suscribirTurnos()" style="font-size:13px;padding:5px 8px;border-radius:6px;border:1px solid var(--border-strong);background:var(--surface);color:var(--text-primary);cursor:pointer;font-family:inherit;">
             <option value="all">Todos</option>
             <option value="0">8:30 – 10:30</option>
             <option value="1">10:30 – 12:30</option>
@@ -193,35 +196,38 @@
           </select>
         </div>
         <div class="card" id="lista-turnos"><div class="loading">Cargando...</div></div>
-        <button class="danger" onclick="limpiarTurnos()">Limpiar turnos del día</button>
+        <button class="danger-btn" onclick="pedirLimpiar()">Limpiar turnos del día</button>
       </div>
+
+      <!-- Tab historial -->
       <div id="tab-historial" style="display:none;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
           <span style="font-size:13px;color:var(--text-secondary);">Mes:</span>
-          <input type="month" id="filtro-mes" onchange="renderHistorial()" style="font-size:13px;padding:5px 8px;border-radius:6px;border:1px solid var(--border-strong);background:var(--surface);color:var(--text-primary);font-family:inherit;" />
+          <input type="month" id="filtro-mes" onchange="renderHistorial()" style="width:auto;" />
         </div>
-        <div class="card" id="resumen-mes" style="margin-bottom:0.75rem;"></div>
-        <div class="card" id="lista-historial"></div>
+        <div class="resumen-grid" id="resumen-mes"></div>
+        <div class="card" id="lista-historial"><div class="loading">Cargando...</div></div>
       </div>
 
+      <!-- Tab config -->
       <div id="tab-config" style="display:none;">
         <div class="card">
           <div style="font-size:14px;font-weight:600;margin-bottom:12px;">Límite de pedidos por franja</div>
           <div id="slots-config"></div>
         </div>
         <div class="card">
-          <div style="font-size:14px;font-weight:600;margin-bottom:12px;">Número de WhatsApp para notificaciones</div>
-          <div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">Código de país + número, sin espacios ni +. Ej: 5492664123456</div>
-          <div style="display:flex;gap:8px;align-items:center;">
+          <div style="font-size:14px;font-weight:600;margin-bottom:8px;">Número de WhatsApp</div>
+          <div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">Código de país + número sin espacios. Ej: 5492664123456</div>
+          <div style="display:flex;gap:8px;">
             <input type="text" id="wsp-number-input" placeholder="5492664123456" />
             <button class="secondary" onclick="guardarWspNumber()">Guardar</button>
           </div>
-          <p id="wsp-number-ok" style="font-size:12.5px;margin-top:6px;display:none;color:var(--success);">✓ Número actualizado.</p>
+          <p id="wsp-ok" style="font-size:12px;color:var(--success);margin-top:6px;display:none;">✓ Guardado.</p>
         </div>
         <div class="card">
           <div style="font-size:14px;font-weight:600;margin-bottom:12px;">Feriados</div>
           <div id="feriados-lista"></div>
-          <div style="display:flex;gap:8px;margin-top:12px;align-items:center;">
+          <div style="display:flex;gap:8px;margin-top:12px;">
             <input type="text" id="nuevo-feriado" placeholder="YYYY-MM-DD" style="width:160px;" />
             <button class="secondary" onclick="agregarFeriado()">+ Agregar</button>
           </div>
@@ -229,38 +235,41 @@
         </div>
         <div class="card">
           <div style="font-size:14px;font-weight:600;margin-bottom:12px;">Contraseña de acceso</div>
-          <div style="display:flex;gap:8px;align-items:center;">
+          <div style="display:flex;gap:8px;">
             <input type="password" id="nueva-pass" placeholder="Nueva contraseña" />
             <button class="secondary" onclick="cambiarPass()">Guardar</button>
           </div>
-          <p id="pass-ok" style="font-size:12.5px;margin-top:6px;display:none;"></p>
+          <p id="pass-ok" style="font-size:12px;margin-top:6px;display:none;"></p>
         </div>
       </div>
     </div>
   </div>
-  <div id="modal-limpiar" class="modal-overlay" style="display:none;">
+
+  <!-- Modal entregar -->
+  <div id="modal-entregar" class="modal-overlay" style="display:none;">
     <div class="modal-box">
-      <div class="modal-title">⚠️ Limpiar turnos del día</div>
-      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">Esto borrará <strong>todos</strong> los turnos de hoy. Ingresá la contraseña de administración para confirmar.</p>
-      <label for="pass-limpiar">Contraseña</label>
-      <input type="password" id="pass-limpiar" placeholder="••••••••" style="margin-bottom:0;" />
-      <p class="msg-err" id="err-limpiar">Contraseña incorrecta.</p>
+      <div class="modal-title">Registrar entrega</div>
+      <label>Número de remito</label>
+      <input type="text" id="remito-input" placeholder="Número de remito" inputmode="numeric" />
+      <p class="msg-err" id="err-remito">Ingresá el número de remito.</p>
       <div class="modal-btns">
-        <button class="secondary" onclick="cerrarModalLimpiar()">Cancelar</button>
-        <button style="flex:1;padding:11px;background:var(--danger);color:white;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:500;font-family:inherit;cursor:pointer;" onclick="confirmarLimpiar()">Sí, limpiar</button>
+        <button class="secondary" onclick="cerrarModalEntregar()">Cancelar</button>
+        <button class="primary" style="width:auto;" onclick="confirmarEntrega()">Confirmar</button>
       </div>
     </div>
   </div>
 
-  <div id="modal-entregar" class="modal-overlay" style="display:none;">
+  <!-- Modal limpiar -->
+  <div id="modal-limpiar" class="modal-overlay" style="display:none;">
     <div class="modal-box">
-      <div class="modal-title">Registrar entrega</div>
-      <label for="remito-input">Número de remito</label>
-      <input type="text" id="remito-input" placeholder="Número de remito" inputmode="numeric" style="margin-bottom:0;" />
-      <p class="msg-err" id="err-remito">Ingresá el número de remito.</p>
+      <div class="modal-title">⚠️ Limpiar turnos del día</div>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">Esto borrará <strong>todos</strong> los turnos de hoy. Ingresá la contraseña para confirmar.</p>
+      <label>Contraseña</label>
+      <input type="password" id="pass-limpiar" placeholder="••••••••" />
+      <p class="msg-err" id="err-limpiar">Contraseña incorrecta.</p>
       <div class="modal-btns">
-        <button class="secondary" onclick="cerrarModal()">Cancelar</button>
-        <button class="primary" onclick="confirmarEntrega()" style="width:auto;flex:1;">Confirmar</button>
+        <button class="secondary" onclick="cerrarModalLimpiar()">Cancelar</button>
+        <button style="flex:1;padding:11px;background:var(--danger);color:white;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:500;font-family:inherit;cursor:pointer;" onclick="confirmarLimpiar()">Sí, limpiar</button>
       </div>
     </div>
   </div>
@@ -282,7 +291,7 @@
   };
 
   const app = initializeApp(firebaseConfig);
-  const db  = getDatabase(app);
+  const db = getDatabase(app);
 
   const TURNOS_DEF = [
     { label: "8:30 – 10:30",  inicio: 8*60+30,  fin: 10*60+30 },
@@ -290,58 +299,40 @@
     { label: "12:30 – 14:30", inicio: 12*60+30, fin: 14*60+30 },
     { label: "14:30 – 16:30", inicio: 14*60+30, fin: 16*60+30 },
   ];
-  const DIAS_CORTOS = ["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
+  const DIAS = ["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
   const MESES = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
-  const BLOQUEO_ANTICIPADO = 2 * 60; // 2 horas en minutos
 
   function pad(n){ return String(n).padStart(2,'0'); }
+  function hoy(){ return new Date().toISOString().slice(0,10); }
   function dateStr(d){ return d.toISOString().slice(0,10); }
-  function formatFechaLarga(ds){
-    const d = new Date(ds+'T12:00:00');
-    return `${DIAS_CORTOS[d.getDay()]} ${d.getDate()} de ${MESES[d.getMonth()]}`;
-  }
+  function fechaLarga(ds){ const d=new Date(ds+'T12:00:00'); return DIAS[d.getDay()]+' '+d.getDate()+' de '+MESES[d.getMonth()]; }
+  function ahoraMin(){ const n=new Date(); return n.getHours()*60+n.getMinutes(); }
 
-  async function fbGet(path){ const s=await get(ref(db,path)); return s.exists()?s.val():null; }
-  async function fbSet(path,val){ await set(ref(db,path),val); }
-  async function fbRemove(path){ await remove(ref(db,path)); }
-
-  async function getConfig(){ const c=await fbGet('config/limites'); return c||[5,5,5,5]; }
-  async function setConfig(c){ await fbSet('config/limites',c); }
+  async function fbGet(p){ const s=await get(ref(db,p)); return s.exists()?s.val():null; }
+  async function fbSet(p,v){ await set(ref(db,p),v); }
+  async function fbRemove(p){ await remove(ref(db,p)); }
+  async function getConfig(){ return (await fbGet('config/limites'))||[5,5,5,5]; }
   async function getFeriados(){ const f=await fbGet('config/feriados'); return f?Object.values(f):[]; }
-  async function getTurnosDelDia(dia){ const t=await fbGet('turnos/'+dia); return t?Object.values(t):[]; }
-  async function getPass(){ const p=await fbGet('config/pass'); return p||'admin123'; }
-  async function getWspNumber(){ const n=await fbGet('config/wspNumber'); return n||''; }
+  async function getPass(){ return (await fbGet('config/pass'))||'admin123'; }
+  async function getWspNum(){ return (await fbGet('config/wspNumber'))||''; }
 
-  // Turno bloqueado si: ya empezó, o faltan menos de 2hs para que empiece
-  // Excepción: último turno (14:30-16:30) se puede cargar hasta las 15:00
-  // Primer turno del día siguiente se bloquea desde las 17hs del día anterior
-  function turnoEsBloqueado(ds, turnoIdx){
-    const now = new Date();
-    const hoy = dateStr(now);
-    const ahora = now.getHours()*60 + now.getMinutes();
-    const t = TURNOS_DEF[turnoIdx];
-
-    if(ds === hoy){
-      if(turnoIdx === 3){
-        // último turno: bloquear desde las 15:00
-        return ahora >= 15*60;
-      }
-      // demás turnos: bloquear 2hs antes del inicio
-      return ahora >= (t.inicio - BLOQUEO_ANTICIPADO);
+  function esBloqueado(ds, ti){
+    const ahora = ahoraMin();
+    const h = hoy();
+    const t = TURNOS_DEF[ti];
+    if(ds === h){
+      if(ti === 3) return ahora >= 15*60;
+      return ahora >= (t.inicio - 2*60);
     }
-
-    // para días futuros: primer turno del día siguiente
-    // disponible solo entre 15:00 y 16:45 del día anterior
-    if(turnoIdx === 0){
-      const dTarget = new Date(ds+'T12:00:00');
-      const dAnterior = new Date(dTarget);
-      dAnterior.setDate(dAnterior.getDate()-1);
-      const dsAnterior = dateStr(dAnterior);
-      if(hoy === dsAnterior){
-        // antes de las 15:00 → bloqueado
+    if(ti === 0){
+      const dT = new Date(ds+'T12:00:00');
+      dT.setDate(dT.getDate()-1);
+      const dA = dateStr(dT);
+      if(h === dA){
         if(ahora < 15*60) return true;
-        // después de las 16:45 → bloqueado
         if(ahora >= 16*60+45) return true;
+      } else {
+        return true;
       }
     }
     return false;
@@ -359,32 +350,35 @@
   async function doLogin(){
     const v=document.getElementById('pass-input').value;
     const err=document.getElementById('err-pass');
-    const pass=await getPass();
-    if(v===pass){ err.style.display='none'; document.getElementById('pass-input').value=''; initAdmin(); showScreen('screen-admin'); }
-    else { err.style.display='block'; }
+    if(v===await getPass()){
+      err.style.display='none';
+      document.getElementById('pass-input').value='';
+      initAdmin();
+      showScreen('screen-admin');
+    } else { err.style.display='block'; }
   }
   function doLogout(){ showScreen('screen-client'); }
 
   let selDia=null, selTurno=null;
 
   async function buildDias(){
-    const feriados=await getFeriados();
-    const grid=document.getElementById('dias-grid');
-    grid.innerHTML='';
-    const hoy=new Date();
+    const feriados = await getFeriados();
+    const grid = document.getElementById('dias-grid');
+    grid.innerHTML = '';
+    const base = new Date();
     for(let i=0;i<10;i++){
-      const d=new Date(hoy); d.setDate(hoy.getDate()+i);
-      const ds=dateStr(d);
-      const habil=esHabil(ds,feriados);
-      const div=document.createElement('div');
-      div.className='dia-btn'+(habil?'':' disabled');
-      div.innerHTML=`<div class="dia-nombre">${DIAS_CORTOS[d.getDay()]}</div><div class="dia-num">${d.getDate()}</div>`;
-      if(habil) div.onclick=()=>selectDia(ds,div);
+      const d = new Date(base); d.setDate(base.getDate()+i);
+      const ds = dateStr(d);
+      const habil = esHabil(ds, feriados);
+      const div = document.createElement('div');
+      div.className = 'dia-btn'+(habil?'':' disabled');
+      div.innerHTML = '<div class="dia-nombre">'+DIAS[d.getDay()]+'</div><div class="dia-num">'+d.getDate()+'</div>';
+      if(habil) div.onclick = ()=>selectDia(ds,div);
       grid.appendChild(div);
     }
   }
 
-  async function selectDia(ds,el){
+  async function selectDia(ds, el){
     selDia=ds; selTurno=null;
     document.querySelectorAll('.dia-btn').forEach(b=>b.classList.remove('selected'));
     el.classList.add('selected');
@@ -394,22 +388,21 @@
   }
 
   async function buildTurnos(ds){
-    const grid=document.getElementById('turnos-grid');
-    grid.innerHTML='<div class="loading">Cargando franjas...</div>';
-    const config=await getConfig();
-    const todos=await getTurnosDelDia(ds);
-    grid.innerHTML=TURNOS_DEF.map((t,i)=>{
-      const ocupados=todos.filter(x=>x.turnoIdx===i).length;
-      const lleno=ocupados>=config[i];
-      const bloqueado=turnoEsBloqueado(ds,i);
-      const noDisp=lleno||bloqueado;
-      let capTxt='';
-      if(lleno) capTxt='Completo';
-      else if(bloqueado) capTxt='No disponible';
-      return `<div class="turno-btn${noDisp?' lleno':''}" onclick="window._selTurno(${i},this)">
-        <div class="turno-hora">${t.label}</div>
-        ${capTxt?`<div class="turno-cap">${capTxt}</div>`:''}
-      </div>`;
+    const grid = document.getElementById('turnos-grid');
+    grid.innerHTML = '<div class="loading">Cargando...</div>';
+    const config = await getConfig();
+    const snap = await get(ref(db,'turnos/'+ds));
+    const todos = snap.exists() ? Object.values(snap.val()) : [];
+    grid.innerHTML = TURNOS_DEF.map((t,i)=>{
+      const ocupados = todos.filter(x=>x.turnoIdx===i).length;
+      const lleno = ocupados >= config[i];
+      const bloq = esBloqueado(ds,i);
+      const noDisp = lleno||bloq;
+      let cap = lleno?'Completo':(bloq?'No disponible':'');
+      return '<div class="turno-btn'+(noDisp?' lleno':'')+'" onclick="window._selTurno('+i+',this)">'
+        +'<div class="turno-hora">'+t.label+'</div>'
+        +(cap?'<div class="turno-cap">'+cap+'</div>':'')
+        +'</div>';
     }).join('');
   }
 
@@ -421,10 +414,10 @@
   };
 
   async function confirmarTurno(){
-    const comp=document.getElementById('comp-input').value.trim();
-    const facturado=document.getElementById('facturado-input').value.trim();
-    const retira=document.getElementById('retira-input').value.trim();
-    let ok=true;
+    const comp = document.getElementById('comp-input').value.trim();
+    const facturado = document.getElementById('facturado-input').value.trim();
+    const retira = document.getElementById('retira-input').value.trim();
+    let ok = true;
     ['err-comp','err-facturado','err-dia','err-turno'].forEach(id=>document.getElementById(id).style.display='none');
     if(!comp){ document.getElementById('err-comp').style.display='block'; ok=false; }
     if(!facturado){ document.getElementById('err-facturado').style.display='block'; ok=false; }
@@ -432,43 +425,45 @@
     if(selTurno===null){ document.getElementById('err-turno').style.display='block'; ok=false; }
     if(!ok) return;
 
-    const turnosRef=ref(db,'turnos/'+selDia);
-    const snap=await get(turnosRef);
-    const existing=snap.exists()?Object.values(snap.val()):[];
+    const tRef = ref(db,'turnos/'+selDia);
+    const snap = await get(tRef);
+    const existing = snap.exists()?Object.values(snap.val()):[];
     if(!existing.find(x=>x.comp===comp && x.turnoIdx===selTurno)){
-      await push(turnosRef,{ comp, facturado, retira, turnoIdx:selTurno, ts:new Date().toISOString() });
+      await push(tRef,{ comp, facturado, retira, turnoIdx:selTurno, ts:new Date().toISOString() });
     }
 
-    const t=TURNOS_DEF[selTurno];
-    const finH=Math.floor(t.fin/60), finM=t.fin%60;
-    document.getElementById('res-hora').textContent=t.label;
-    document.getElementById('res-dia').textContent=formatFechaLarga(selDia);
-    document.getElementById('res-comp').textContent=comp;
-    document.getElementById('res-facturado').textContent=facturado;
-    document.getElementById('res-retira').textContent=retira||'—';
-    document.getElementById('res-tip').textContent=`Pasá a retirarlo dentro de la franja horaria seleccionada.`;
-    window._ta={ comp, facturado, retira, dia:selDia, turnoLabel:t.label, hora:`${pad(finH)}:${pad(finM)}` };
+    const t = TURNOS_DEF[selTurno];
+    document.getElementById('res-hora').textContent = t.label;
+    document.getElementById('res-dia').textContent = fechaLarga(selDia);
+    document.getElementById('res-comp').textContent = comp;
+    document.getElementById('res-facturado').textContent = facturado;
+    document.getElementById('res-retira').textContent = retira||'—';
+    window._ta = { comp, facturado, retira, dia:selDia, turnoLabel:t.label };
 
     document.getElementById('client-form').style.display='none';
     document.getElementById('client-result').style.display='block';
   }
 
   async function compartirWsp(){
-    const d=window._ta; if(!d) return;
-    const wspNum = await getWspNumber();
-    const retiraStr = d.retira ? `\nRetirado por: *${d.retira}*` : '';
-    const txt=`✅ *Steel SRL – Retiro de mercadería*\n\nPedido n.º: *${d.comp}*\nFacturado a: *${d.facturado}*${retiraStr}\nDía: ${formatFechaLarga(d.dia)}\nFranja horaria: *${d.turnoLabel}*\n\nPasá a buscar tu pedido dentro de la franja horaria solicitada.\n📍 Retirá por galpón, 25 de Mayo 2024.\n\n🔧 *Recordá:* si tenés material de ferretería, pasá por el local de la esquina.`;
-    const url = wspNum
-      ? `https://wa.me/${wspNum}?text=${encodeURIComponent(txt)}`
-      : `https://wa.me/?text=${encodeURIComponent(txt)}`;
+    const d = window._ta; if(!d) return;
+    const wspNum = await getWspNum();
+    const retiraStr = d.retira ? '\nRetirado por: *'+d.retira+'*' : '';
+    const txt = '✅ *Steel SRL – Retiro de mercadería*'
+      +'\n\nPedido n.º: *'+d.comp+'*'
+      +'\nFacturado a: *'+d.facturado+'*'
+      +retiraStr
+      +'\nDía: '+fechaLarga(d.dia)
+      +'\nFranja horaria: *'+d.turnoLabel+'*'
+      +'\n\nPasá a buscar tu pedido dentro de la franja horaria solicitada.'
+      +'\n📍 Retirá por galpón, 25 de Mayo 2024.'
+      +'\n\n🔧 *Recordá:* si tenés material de ferretería, pasá por el local de la esquina.';
+    const url = wspNum ? 'https://wa.me/'+wspNum+'?text='+encodeURIComponent(txt) : 'https://wa.me/?text='+encodeURIComponent(txt);
     window.open(url,'_blank');
   }
 
   async function resetCliente(){
     selDia=null; selTurno=null;
-    document.getElementById('comp-input').value='';
-    document.getElementById('facturado-input').value='';
-    document.getElementById('retira-input').value='';
+    ['comp-input','facturado-input','retira-input'].forEach(id=>document.getElementById(id).value='');
     document.getElementById('client-form').style.display='block';
     document.getElementById('client-result').style.display='none';
     document.getElementById('card-turnos').classList.add('card-disabled');
@@ -476,276 +471,195 @@
     await buildDias();
   }
 
+  // ── ADMIN ────────────────────────────────────────────
   async function initAdmin(){
-    const now=new Date();
-    document.getElementById('admin-fecha').textContent=formatFechaLarga(dateStr(now))+' – '+pad(now.getHours())+':'+pad(now.getMinutes())+' hs';
-    renderTurnos(); renderConfig(); renderFeriados();
-    const wspNum=await getWspNumber();
-    document.getElementById('wsp-number-input').value=wspNum;
+    const now = new Date();
+    document.getElementById('admin-fecha').textContent = fechaLarga(hoy())+' – '+pad(now.getHours())+':'+pad(now.getMinutes())+' hs';
+    suscribirTurnos();
+    renderConfig();
+    renderFeriados();
+    const n = await getWspNum();
+    document.getElementById('wsp-number-input').value = n;
   }
 
-  function switchTab(tabId,el){
-    ['tab-turnos','tab-config'].forEach(id=>document.getElementById(id).style.display='none');
+  function switchTab(tabId, el){
+    ['tab-turnos','tab-historial','tab-config'].forEach(id=>document.getElementById(id).style.display='none');
     document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
     document.getElementById(tabId).style.display='block';
     el.classList.add('active');
-  }
-
-  let unsubTurnos=null;
-  async function renderTurnos(){
-    const filtro=document.getElementById('filtro-turno').value;
-    const hoy=dateStr(new Date());
-    const cont=document.getElementById('lista-turnos');
-    cont.innerHTML='<div class="loading">Cargando...</div>';
-    if(unsubTurnos) unsubTurnos();
-    unsubTurnos=onValue(ref(db,'turnos/'+hoy),snap=>{
-      const todos=snap.exists()?Object.values(snap.val()):[];
-      const fil=filtro==='all'?todos:todos.filter(x=>String(x.turnoIdx)===filtro);
-      if(fil.length===0){ cont.innerHTML='<div class="empty">Sin turnos registrados hoy.</div>'; return; }
-      fil.sort((a,b)=>a.turnoIdx-b.turnoIdx);
-      cont.innerHTML=fil.map((x,idx)=>{
-        const t=TURNOS_DEF[x.turnoIdx];
-        const entregado = x.entregado;
-        const key = x._key||idx;
-        return `<div class="turno-row" id="row-${key}" style="${entregado?'opacity:0.5':''}">
-          <div style="flex:1;">
-            <div style="font-weight:500;">${x.facturado||'—'}</div>
-            <div style="color:var(--text-secondary);font-size:12px;">Pedido ${x.comp}${x.retira?' · Retira: '+x.retira:''} · ${t.label}</div>
-            ${entregado?`<div style="font-size:11px;color:var(--success);margin-top:2px;">✓ Entregado ${x.horaEntrega} · Remito ${x.remito}</div>`:''}
-          </div>
-          ${!entregado?`<button onclick="window._entregar('${key}')" style="background:var(--accent);color:white;border:none;border-radius:6px;padding:6px 10px;font-size:12px;font-family:inherit;cursor:pointer;white-space:nowrap;">Entregar</button>`:'<span class="badge">✓</span>'}
-        </div>`;
-      }).join('');
-    });
-  }
-
-  async function renderConfig(){
-    const config=await getConfig();
-    document.getElementById('slots-config').innerHTML=TURNOS_DEF.map((t,i)=>
-      `<div class="slot-row"><span>${t.label}</span>
-        <div style="display:flex;align-items:center;gap:7px;">
-          <span style="font-size:12px;color:var(--text-secondary);">máx.</span>
-          <input type="number" min="1" max="99" value="${config[i]}" onchange="window._updateSlot(${i},this.value)" />
-          <span style="font-size:12px;color:var(--text-secondary);">pedidos</span>
-        </div>
-      </div>`
-    ).join('');
-  }
-
-  window._updateSlot=async function(i,val){ const c=await getConfig(); c[i]=parseInt(val)||1; await setConfig(c); };
-
-  async function renderFeriados(){
-    const f=await getFeriados();
-    const cont=document.getElementById('feriados-lista');
-    if(f.length===0){ cont.innerHTML='<div style="font-size:13px;color:var(--text-hint);">Sin feriados configurados.</div>'; return; }
-    cont.innerHTML=f.map(d=>`<span class="feriado-tag">${formatFechaLarga(d)} <button onclick="window._quitarFeriado('${d}')">×</button></span>`).join('');
-  }
-
-  window._agregarFeriado=async function(){
-    const val=document.getElementById('nuevo-feriado').value.trim();
-    const err=document.getElementById('err-feriado-admin');
-    if(!/^\d{4}-\d{2}-\d{2}$/.test(val)){ err.style.display='block'; return; }
-    err.style.display='none';
-    const f=await getFeriados();
-    if(!f.includes(val)){ f.push(val); const obj={}; f.forEach((d,i)=>obj[i]=d); await fbSet('config/feriados',obj); }
-    document.getElementById('nuevo-feriado').value='';
-    renderFeriados();
-  };
-
-  window._quitarFeriado=async function(d){
-    const f=(await getFeriados()).filter(x=>x!==d);
-    const obj={}; f.forEach((dd,i)=>obj[i]=dd);
-    await fbSet('config/feriados',obj);
-    renderFeriados();
-  };
-
-  window._limpiarTurnos=function(){
-    document.getElementById('pass-limpiar').value='';
-    document.getElementById('err-limpiar').style.display='none';
-    document.getElementById('modal-limpiar').style.display='flex';
-  };
-
-  window.cerrarModalLimpiar=function(){
-    document.getElementById('modal-limpiar').style.display='none';
-  };
-
-  window.confirmarLimpiar=async function(){
-    const v = document.getElementById('pass-limpiar').value;
-    const pass = await getPass();
-    if(v !== pass){ document.getElementById('err-limpiar').style.display='block'; return; }
-    await fbRemove('turnos/'+dateStr(new Date()));
-    cerrarModalLimpiar();
-  };
-
-  window._cambiarPass=async function(){
-    const v=document.getElementById('nueva-pass').value;
-    const el=document.getElementById('pass-ok');
-    if(v.length<4){ el.textContent='Mínimo 4 caracteres.'; el.style.color='var(--danger)'; el.style.display='block'; return; }
-    await fbSet('config/pass',v);
-    document.getElementById('nueva-pass').value='';
-    el.textContent='✓ Contraseña actualizada.'; el.style.color='var(--success)'; el.style.display='block';
-  };
-
-  window._guardarWspNumber=async function(){
-    const val=document.getElementById('wsp-number-input').value.trim();
-    await fbSet('config/wspNumber', val);
-    const el=document.getElementById('wsp-number-ok');
-    el.style.display='block';
-    setTimeout(()=>el.style.display='none', 3000);
-  };
-
-  // Exponer al HTML
-  window.showScreen=showScreen; window.showAdmin=showAdmin; window.doLogin=doLogin; window.doLogout=doLogout;
-  window.confirmarTurno=confirmarTurno; window.compartirWsp=compartirWsp; window.resetCliente=resetCliente;
-  window.switchTab=switchTab; window.renderTurnos=renderTurnos;
-  window.agregarFeriado=window._agregarFeriado; window.quitarFeriado=window._quitarFeriado;
-  window.limpiarTurnos=window._limpiarTurnos; window.cambiarPass=window._cambiarPass;
-  window.guardarWspNumber=window._guardarWspNumber;
-
-  // ── Entrega ─────────────────────────────────────────────────
-  let _entregaKey = null;
-  let _entregaDia = null;
-
-  window._entregar = function(key){
-    _entregaKey = key;
-    _entregaDia = dateStr(new Date());
-    document.getElementById('remito-input').value='';
-    document.getElementById('err-remito').style.display='none';
-    document.getElementById('modal-entregar').style.display='flex';
-  };
-
-  window.cerrarModal = function(){
-    document.getElementById('modal-entregar').style.display='none';
-  };
-
-  window.confirmarEntrega = async function(){
-    const remito = document.getElementById('remito-input').value.trim().replace(/\D/g,'');
-    document.getElementById('remito-input').value = remito;
-    if(!remito){ document.getElementById('err-remito').style.display='block'; return; }
-
-    const now = new Date();
-    const horaEntrega = pad(now.getHours())+':'+pad(now.getMinutes());
-    const dia = _entregaDia;
-
-    // Leer el turno original para saber si retiró en horario
-    const snap = await get(ref(db,'turnos/'+dia));
-    if(!snap.exists()) return;
-    const entries = Object.entries(snap.val());
-    const entry = entries.find(([k,v])=>k===_entregaKey);
-    if(!entry) return;
-    const [key, turno] = entry;
-    const ahora = now.getHours()*60+now.getMinutes();
-    const t = TURNOS_DEF[turno.turnoIdx];
-    const enHorario = ahora >= t.inicio && ahora <= t.fin;
-
-    // Actualizar en Firebase
-    await fbSet('turnos/'+dia+'/'+key+'/entregado', true);
-    await fbSet('turnos/'+dia+'/'+key+'/horaEntrega', horaEntrega);
-    await fbSet('turnos/'+dia+'/'+key+'/remito', remito);
-    await fbSet('turnos/'+dia+'/'+key+'/enHorario', enHorario);
-
-    // Guardar en historial mensual
-    const mes = dia.slice(0,7); // YYYY-MM
-    await push(ref(db,'historial/'+mes), {
-      comp: turno.comp,
-      facturado: turno.facturado||'',
-      retira: turno.retira||'',
-      turnoLabel: t.label,
-      dia,
-      horaEntrega,
-      remito,
-      enHorario,
-      ts: now.toISOString()
-    });
-
-    cerrarModal();
-  };
-
-  // ── Historial ────────────────────────────────────────────────
-  async function renderHistorial(){
-    const mesInput = document.getElementById('filtro-mes');
-    const mes = mesInput.value || dateStr(new Date()).slice(0,7);
-    if(!mesInput.value) mesInput.value = mes;
-
-    const cont = document.getElementById('lista-historial');
-    const resumen = document.getElementById('resumen-mes');
-    cont.innerHTML='<div class="loading">Cargando...</div>';
-
-    const snap = await get(ref(db,'historial/'+mes));
-    const items = snap.exists() ? Object.values(snap.val()) : [];
-
-    // resumen
-    const total = items.length;
-    const enHorario = items.filter(x=>x.enHorario).length;
-    const fueraHorario = total - enHorario;
-    resumen.innerHTML=`<div class="resumen-grid">
-      <div class="resumen-item"><div class="resumen-num">${total}</div><div class="resumen-lbl">Total entregas</div></div>
-      <div class="resumen-item"><div class="resumen-num" style="color:var(--success);">${enHorario}</div><div class="resumen-lbl">En horario</div></div>
-      <div class="resumen-item"><div class="resumen-num" style="color:var(--warning-text);">${fueraHorario}</div><div class="resumen-lbl">Fuera horario</div></div>
-    </div>`;
-
-    if(items.length===0){ cont.innerHTML='<div class="empty">Sin entregas registradas este mes.</div>'; return; }
-
-    // ordenar por fecha y hora
-    items.sort((a,b)=>a.ts>b.ts?-1:1);
-    cont.innerHTML = items.map(x=>`
-      <div class="hist-row">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div>
-            <div style="font-weight:500;">${x.facturado||x.comp}</div>
-            <div style="font-size:12px;color:var(--text-secondary);">Pedido ${x.comp} · Remito ${x.remito}</div>
-            <div style="font-size:12px;color:var(--text-secondary);">${x.dia} · Turno: ${x.turnoLabel}</div>
-          </div>
-          <div style="text-align:right;flex-shrink:0;margin-left:8px;">
-            <div style="font-size:13px;font-weight:500;">${x.horaEntrega} hs</div>
-            <div style="font-size:11px;color:${x.enHorario?'var(--success)':'var(--warning-text)'};">${x.enHorario?'En horario':'Fuera horario'}</div>
-          </div>
-        </div>
-      </div>`).join('');
-  }
-
-  // exponer renderHistorial
-  window.renderHistorial = renderHistorial;
-
-  // al cambiar tab historial, cargar datos
-  const origSwitchTab = window.switchTab;
-  window.switchTab = function(tabId, el){
-    origSwitchTab(tabId, el);
     if(tabId==='tab-historial') renderHistorial();
-  };
+  }
 
-  // Listener en tiempo real para turnos del día con keys correctas
+  let unsubTurnos = null;
   function suscribirTurnos(){
     if(unsubTurnos) unsubTurnos();
-    const hoy = dateStr(new Date());
-    unsubTurnos = onValue(ref(db,'turnos/'+hoy), snap=>{
-      const filtro = document.getElementById('filtro-turno')?.value||'all';
-      const cont = document.getElementById('lista-turnos');
-      if(!cont) return;
-      const todos = snap.exists()
-        ? Object.entries(snap.val()).map(([k,v])=>({...v, _key:k}))
-        : [];
+    const filtro = document.getElementById('filtro-turno')?.value||'all';
+    const cont = document.getElementById('lista-turnos');
+    cont.innerHTML = '<div class="loading">Cargando...</div>';
+    unsubTurnos = onValue(ref(db,'turnos/'+hoy()), snap=>{
+      const todos = snap.exists() ? Object.entries(snap.val()).map(([k,v])=>({...v,_key:k})) : [];
       const fil = filtro==='all' ? todos : todos.filter(x=>String(x.turnoIdx)===filtro);
       if(fil.length===0){ cont.innerHTML='<div class="empty">Sin turnos registrados hoy.</div>'; return; }
       fil.sort((a,b)=>a.turnoIdx-b.turnoIdx);
       cont.innerHTML = fil.map(x=>{
         const t = TURNOS_DEF[x.turnoIdx];
         const entregado = !!x.entregado;
-        const keyEsc = x._key.replace(/['"]/g,'');
+        const k = x._key;
         return '<div class="turno-row" style="'+(entregado?'opacity:0.55':'')+'">'
-          +'<div style="flex:1;">'
-          +'<div style="font-weight:500;">'+(x.facturado||'—')+'</div>'
-          +'<div style="color:var(--text-secondary);font-size:12px;">Pedido '+x.comp+(x.retira?' · Retira: '+x.retira:'')+' · '+t.label+'</div>'
-          +(entregado?'<div style="font-size:11px;color:var(--success);margin-top:2px;">✓ Entregado '+x.horaEntrega+' hs · Remito '+x.remito+'</div>':'')
+          +'<div style="flex:1;min-width:0;">'
+          +'<div style="font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+(x.facturado||'—')+'</div>'
+          +'<div style="color:var(--text-secondary);font-size:12px;">Pedido '+x.comp+(x.retira?' · '+x.retira:'')+' · '+t.label+'</div>'
+          +(entregado?'<div style="font-size:11px;color:var(--success);margin-top:2px;">✓ '+x.horaEntrega+' hs · Remito '+x.remito+'</div>':'')
           +'</div>'
           +(!entregado
-            ? '<button onclick="window._entregar(''+keyEsc+'')" style="background:var(--accent);color:white;border:none;border-radius:6px;padding:6px 10px;font-size:12px;font-family:inherit;cursor:pointer;white-space:nowrap;margin-left:8px;">Entregar</button>'
-            : '<span class="badge" style="margin-left:8px;">✓</span>')
+            ? '<button onclick="window._abrirEntrega(\''+k+'\')" style="margin-left:8px;background:var(--accent);color:white;border:none;border-radius:6px;padding:6px 10px;font-size:12px;font-family:inherit;cursor:pointer;white-space:nowrap;flex-shrink:0;">Entregar</button>'
+            : '<span class="badge" style="margin-left:8px;flex-shrink:0;">✓</span>')
           +'</div>';
       }).join('');
     });
   }
-  suscribirTurnos();
+
+  // Entregar
+  let _keyEntrega = null;
+  window._abrirEntrega = function(k){
+    _keyEntrega = k;
+    document.getElementById('remito-input').value='';
+    document.getElementById('err-remito').style.display='none';
+    document.getElementById('modal-entregar').style.display='flex';
+  };
+  function cerrarModalEntregar(){ document.getElementById('modal-entregar').style.display='none'; }
+
+  async function confirmarEntrega(){
+    const remito = document.getElementById('remito-input').value.trim().replace(/\D/g,'');
+    document.getElementById('remito-input').value = remito;
+    if(!remito){ document.getElementById('err-remito').style.display='block'; return; }
+    const now = new Date();
+    const hora = pad(now.getHours())+':'+pad(now.getMinutes());
+    const dia = hoy();
+    const snap = await get(ref(db,'turnos/'+dia+'/'+_keyEntrega));
+    if(!snap.exists()){ cerrarModalEntregar(); return; }
+    const turno = snap.val();
+    const ahora = ahoraMin();
+    const t = TURNOS_DEF[turno.turnoIdx];
+    const enHorario = ahora >= t.inicio && ahora <= t.fin;
+    await fbSet('turnos/'+dia+'/'+_keyEntrega+'/entregado', true);
+    await fbSet('turnos/'+dia+'/'+_keyEntrega+'/horaEntrega', hora);
+    await fbSet('turnos/'+dia+'/'+_keyEntrega+'/remito', remito);
+    await fbSet('turnos/'+dia+'/'+_keyEntrega+'/enHorario', enHorario);
+    const mes = dia.slice(0,7);
+    await push(ref(db,'historial/'+mes),{
+      comp: turno.comp, facturado: turno.facturado||'', retira: turno.retira||'',
+      turnoLabel: t.label, dia, horaEntrega: hora, remito, enHorario, ts: now.toISOString()
+    });
+    cerrarModalEntregar();
+  }
+
+  // Limpiar con contraseña
+  function pedirLimpiar(){
+    document.getElementById('pass-limpiar').value='';
+    document.getElementById('err-limpiar').style.display='none';
+    document.getElementById('modal-limpiar').style.display='flex';
+  }
+  function cerrarModalLimpiar(){ document.getElementById('modal-limpiar').style.display='none'; }
+  async function confirmarLimpiar(){
+    const v = document.getElementById('pass-limpiar').value;
+    if(v !== await getPass()){ document.getElementById('err-limpiar').style.display='block'; return; }
+    await fbRemove('turnos/'+hoy());
+    cerrarModalLimpiar();
+  }
+
+  // Historial
+  async function renderHistorial(){
+    const mesEl = document.getElementById('filtro-mes');
+    const mes = mesEl.value || hoy().slice(0,7);
+    if(!mesEl.value) mesEl.value = mes;
+    const cont = document.getElementById('lista-historial');
+    const res = document.getElementById('resumen-mes');
+    cont.innerHTML = '<div class="loading">Cargando...</div>';
+    const snap = await get(ref(db,'historial/'+mes));
+    const items = snap.exists() ? Object.values(snap.val()) : [];
+    const total = items.length;
+    const enH = items.filter(x=>x.enHorario).length;
+    res.innerHTML = '<div class="resumen-item"><div class="resumen-num">'+total+'</div><div class="resumen-lbl">Total entregas</div></div>'
+      +'<div class="resumen-item"><div class="resumen-num" style="color:var(--success);">'+enH+'</div><div class="resumen-lbl">En horario</div></div>'
+      +'<div class="resumen-item"><div class="resumen-num" style="color:var(--warning-text);">'+(total-enH)+'</div><div class="resumen-lbl">Fuera horario</div></div>';
+    if(!items.length){ cont.innerHTML='<div class="empty">Sin entregas este mes.</div>'; return; }
+    items.sort((a,b)=>a.ts>b.ts?-1:1);
+    cont.innerHTML = '<div class="card">'+items.map(x=>
+      '<div class="hist-row">'
+      +'<div style="display:flex;justify-content:space-between;align-items:flex-start;">'
+      +'<div><div style="font-weight:500;">'+(x.facturado||x.comp)+'</div>'
+      +'<div style="font-size:12px;color:var(--text-secondary);">Pedido '+x.comp+' · Remito '+x.remito+'</div>'
+      +'<div style="font-size:12px;color:var(--text-secondary);">'+x.dia+' · '+x.turnoLabel+'</div></div>'
+      +'<div style="text-align:right;flex-shrink:0;margin-left:8px;">'
+      +'<div style="font-size:13px;font-weight:500;">'+x.horaEntrega+' hs</div>'
+      +'<div style="font-size:11px;color:'+(x.enHorario?'var(--success)':'var(--warning-text)')+';">'+(x.enHorario?'En horario':'Fuera horario')+'</div>'
+      +'</div></div></div>'
+    ).join('')+'</div>';
+  }
+
+  async function renderConfig(){
+    const config = await getConfig();
+    document.getElementById('slots-config').innerHTML = TURNOS_DEF.map((t,i)=>
+      '<div class="slot-row"><span>'+t.label+'</span>'
+      +'<div style="display:flex;align-items:center;gap:7px;">'
+      +'<span style="font-size:12px;color:var(--text-secondary);">máx.</span>'
+      +'<input type="number" min="1" max="99" value="'+config[i]+'" onchange="window._updSlot('+i+',this.value)" style="width:58px;text-align:center;" />'
+      +'<span style="font-size:12px;color:var(--text-secondary);">pedidos</span>'
+      +'</div></div>'
+    ).join('');
+  }
+
+  window._updSlot = async function(i,v){ const c=await getConfig(); c[i]=parseInt(v)||1; await fbSet('config/limites',c); };
+
+  async function renderFeriados(){
+    const f = await getFeriados();
+    const cont = document.getElementById('feriados-lista');
+    if(!f.length){ cont.innerHTML='<div style="font-size:13px;color:var(--text-hint);">Sin feriados configurados.</div>'; return; }
+    cont.innerHTML = f.map(d=>'<span class="feriado-tag">'+fechaLarga(d)+' <button onclick="window._qFeriado(\''+d+'\')">×</button></span>').join('');
+  }
+
+  window._qFeriado = async function(d){
+    const f=(await getFeriados()).filter(x=>x!==d);
+    const obj={}; f.forEach((dd,i)=>obj[i]=dd);
+    await fbSet('config/feriados',obj); renderFeriados();
+  };
+
+  async function agregarFeriado(){
+    const val = document.getElementById('nuevo-feriado').value.trim();
+    const err = document.getElementById('err-feriado-admin');
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(val)){ err.style.display='block'; return; }
+    err.style.display='none';
+    const f = await getFeriados();
+    if(!f.includes(val)){ f.push(val); const obj={}; f.forEach((d,i)=>obj[i]=d); await fbSet('config/feriados',obj); }
+    document.getElementById('nuevo-feriado').value='';
+    renderFeriados();
+  }
+
+  async function guardarWspNumber(){
+    const v = document.getElementById('wsp-number-input').value.trim();
+    await fbSet('config/wspNumber',v);
+    const el=document.getElementById('wsp-ok'); el.style.display='block';
+    setTimeout(()=>el.style.display='none',3000);
+  }
+
+  async function cambiarPass(){
+    const v = document.getElementById('nueva-pass').value;
+    const el = document.getElementById('pass-ok');
+    if(v.length<4){ el.textContent='Mínimo 4 caracteres.'; el.style.color='var(--danger)'; el.style.display='block'; return; }
+    await fbSet('config/pass',v);
+    document.getElementById('nueva-pass').value='';
+    el.textContent='✓ Contraseña actualizada.'; el.style.color='var(--success)'; el.style.display='block';
+  }
+
+  // Exponer al HTML
+  window.showScreen=showScreen; window.showAdmin=showAdmin; window.doLogin=doLogin; window.doLogout=doLogout;
+  window.confirmarTurno=confirmarTurno; window.compartirWsp=compartirWsp; window.resetCliente=resetCliente;
+  window.switchTab=switchTab; window.suscribirTurnos=suscribirTurnos;
+  window.cerrarModalEntregar=cerrarModalEntregar; window.confirmarEntrega=confirmarEntrega;
+  window.pedirLimpiar=pedirLimpiar; window.cerrarModalLimpiar=cerrarModalLimpiar; window.confirmarLimpiar=confirmarLimpiar;
+  window.renderHistorial=renderHistorial; window.agregarFeriado=agregarFeriado;
+  window.guardarWspNumber=guardarWspNumber; window.cambiarPass=cambiarPass;
 
   buildDias();
 </script>
