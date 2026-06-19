@@ -9,262 +9,85 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg: #f5f5f3;
-      --surface: #ffffff;
-      --border: #e0e0db;
-      --border-strong: #c8c8c2;
-      --text-primary: #1a1a18;
-      --text-secondary: #6b6b66;
-      --text-hint: #9b9b96;
-      --accent: #1d6fb8;
-      --accent-light: #e8f1fa;
-      --accent-border: #a8c8ed;
-      --success: #1a7a4a;
-      --success-light: #e8f7ef;
-      --success-border: #90d4b0;
-      --danger: #c0392b;
-      --danger-light: #fdf0ee;
-      --warning-light: #fdf7e8;
-      --warning-border: #e8d080;
-      --warning-text: #856400;
-      --radius: 10px;
-      --radius-sm: 6px;
-      --shadow: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+      --bg: #f5f5f3; --surface: #ffffff; --border: #e0e0db; --border-strong: #c8c8c2;
+      --text-primary: #1a1a18; --text-secondary: #6b6b66; --text-hint: #9b9b96;
+      --accent: #1d6fb8; --accent-light: #e8f1fa; --accent-border: #a8c8ed;
+      --success: #1a7a4a; --success-light: #e8f7ef; --success-border: #90d4b0;
+      --danger: #c0392b; --warning-light: #fdf7e8; --warning-border: #e8d080; --warning-text: #856400;
+      --radius: 10px; --radius-sm: 6px; --shadow: 0 1px 3px rgba(0,0,0,0.07);
     }
-
-    body {
-      font-family: 'Inter', system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text-primary);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 1.5rem 1rem 3rem;
-    }
-
-    .logo-bar {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 1.5rem;
-      padding-top: 0.5rem;
-    }
-    .logo-icon {
-      width: 40px; height: 40px;
-      background: var(--accent);
-      border-radius: var(--radius-sm);
-      display: flex; align-items: center; justify-content: center;
-    }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text-primary); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 1.5rem 1rem 3rem; }
+    .logo-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 1.5rem; padding-top: 0.5rem; }
+    .logo-icon { width: 40px; height: 40px; background: var(--accent); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; }
     .logo-icon svg { width: 22px; height: 22px; stroke: white; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-    .logo-text h1 { font-size: 15px; font-weight: 600; color: var(--text-primary); }
-    .logo-text p  { font-size: 12px; color: var(--text-secondary); }
-
-    .container {
-      width: 100%;
-      max-width: 480px;
-    }
-
-    .screen { display: none; }
-    .screen.active { display: block; }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.25rem;
-      margin-bottom: 0.75rem;
-      box-shadow: var(--shadow);
-    }
-
-    .step-label {
-      font-size: 10.5px;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--text-hint);
-      margin-bottom: 10px;
-    }
-
-    .hint-box {
-      background: var(--accent-light);
-      border: 1px solid var(--accent-border);
-      border-radius: var(--radius-sm);
-      padding: 10px 12px;
-      margin-bottom: 14px;
-      display: flex;
-      gap: 9px;
-      align-items: flex-start;
-    }
+    .logo-text h1 { font-size: 15px; font-weight: 600; } .logo-text p { font-size: 12px; color: var(--text-secondary); }
+    .container { width: 100%; max-width: 480px; }
+    .screen { display: none; } .screen.active { display: block; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; margin-bottom: 0.75rem; box-shadow: var(--shadow); }
+    .step-label { font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-hint); margin-bottom: 10px; }
+    .hint-box { background: var(--accent-light); border: 1px solid var(--accent-border); border-radius: var(--radius-sm); padding: 10px 12px; margin-bottom: 14px; display: flex; gap: 9px; align-items: flex-start; }
     .hint-box svg { width: 16px; height: 16px; stroke: var(--accent); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; margin-top: 2px; }
-    .hint-box p { font-size: 12.5px; color: var(--accent); line-height: 1.55; }
-    .hint-box strong { font-weight: 600; }
-
+    .hint-box p { font-size: 12.5px; color: var(--accent); line-height: 1.55; } .hint-box strong { font-weight: 600; }
     label { font-size: 13px; color: var(--text-secondary); display: block; margin-bottom: 6px; }
-
-    input[type=text], input[type=password], input[type=number] {
-      width: 100%;
-      padding: 9px 12px;
-      border: 1px solid var(--border-strong);
-      border-radius: var(--radius-sm);
-      font-size: 15px;
-      font-family: inherit;
-      color: var(--text-primary);
-      background: var(--surface);
-      outline: none;
-      transition: border-color 0.15s;
-      margin-bottom: 0;
-    }
+    input[type=text], input[type=password], input[type=number] { width: 100%; padding: 9px 12px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); font-size: 15px; font-family: inherit; color: var(--text-primary); background: var(--surface); outline: none; transition: border-color 0.15s; }
     input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(29,111,184,0.12); }
-
     .msg-err { font-size: 12.5px; color: var(--danger); margin-top: 6px; display: none; }
-
-    button.primary {
-      width: 100%; padding: 11px;
-      background: var(--accent); color: white;
-      border: none; border-radius: var(--radius-sm);
-      font-size: 14px; font-weight: 500;
-      font-family: inherit; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; gap: 7px;
-      transition: background 0.15s;
-    }
+    button.primary { width: 100%; padding: 11px; background: var(--accent); color: white; border: none; border-radius: var(--radius-sm); font-size: 14px; font-weight: 500; font-family: inherit; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 7px; }
     button.primary:hover { background: #165d9e; }
-    button.secondary {
-      background: transparent; border: 1px solid var(--border-strong);
-      border-radius: var(--radius-sm); padding: 8px 14px;
-      font-size: 13px; font-family: inherit; color: var(--text-primary); cursor: pointer;
-    }
-    button.secondary:hover { background: var(--bg); }
-    button.danger {
-      background: transparent; border: 1px solid #e8b0aa;
-      border-radius: var(--radius-sm); padding: 7px 13px;
-      font-size: 12.5px; font-family: inherit; color: var(--danger); cursor: pointer;
-    }
-
-    .dias-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 6px;
-      margin-bottom: 4px;
-    }
-    .dia-btn {
-      border: 1px solid var(--border-strong);
-      border-radius: var(--radius-sm);
-      padding: 9px 4px;
-      text-align: center;
-      cursor: pointer;
-      background: var(--surface);
-      transition: border-color 0.12s, background 0.12s;
-      user-select: none;
-    }
+    button.secondary { background: transparent; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 8px 14px; font-size: 13px; font-family: inherit; color: var(--text-primary); cursor: pointer; }
+    button.danger { background: transparent; border: 1px solid #e8b0aa; border-radius: var(--radius-sm); padding: 7px 13px; font-size: 12.5px; font-family: inherit; color: var(--danger); cursor: pointer; }
+    .dias-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 4px; }
+    .dia-btn { border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 9px 4px; text-align: center; cursor: pointer; background: var(--surface); user-select: none; }
     .dia-btn:hover { border-color: var(--accent); background: var(--accent-light); }
     .dia-btn.selected { border: 2px solid var(--accent); background: var(--accent-light); }
     .dia-btn.disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
-    .dia-nombre { font-size: 10px; color: var(--text-hint); }
-    .dia-num { font-size: 17px; font-weight: 500; color: var(--text-primary); }
-    .dia-btn.selected .dia-nombre,
-    .dia-btn.selected .dia-num { color: var(--accent); }
-
-    .turnos-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-    .turno-btn {
-      border: 1px solid var(--border-strong);
-      border-radius: var(--radius-sm);
-      padding: 14px 10px;
-      text-align: center;
-      cursor: pointer;
-      background: var(--surface);
-      transition: border-color 0.12s, background 0.12s;
-      user-select: none;
-    }
+    .dia-nombre { font-size: 10px; color: var(--text-hint); } .dia-num { font-size: 17px; font-weight: 500; }
+    .dia-btn.selected .dia-nombre, .dia-btn.selected .dia-num { color: var(--accent); }
+    .turnos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .turno-btn { border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 14px 10px; text-align: center; cursor: pointer; background: var(--surface); user-select: none; }
     .turno-btn:hover { border-color: var(--accent); background: var(--accent-light); }
     .turno-btn.selected { border: 2px solid var(--accent); background: var(--accent-light); }
     .turno-btn.lleno { opacity: 0.38; cursor: not-allowed; pointer-events: none; background: var(--bg); }
-    .turno-hora { font-size: 13.5px; font-weight: 500; color: var(--text-primary); }
-    .turno-btn.selected .turno-hora { color: var(--accent); }
+    .turno-hora { font-size: 13.5px; font-weight: 500; } .turno-btn.selected .turno-hora { color: var(--accent); }
     .turno-cap { font-size: 11px; color: var(--danger); margin-top: 3px; }
-
     .card-disabled { opacity: 0.45; pointer-events: none; }
-
-    .result-card {
-      background: var(--success-light);
-      border: 1px solid var(--success-border);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      text-align: center;
-      margin-bottom: 0.75rem;
-    }
-    .res-label { font-size: 12.5px; color: var(--success); }
+    .result-card { background: var(--success-light); border: 1px solid var(--success-border); border-radius: var(--radius); padding: 1.5rem; text-align: center; margin-bottom: 0.75rem; }
     .res-hora { font-size: 28px; font-weight: 600; color: var(--success); margin: 6px 0 4px; }
-    .res-dia  { font-size: 14px; font-weight: 500; color: var(--text-primary); }
-    .res-tip  { font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
-
-    .wsp-btn {
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      background: #25D366; color: white;
-      border: none; border-radius: var(--radius-sm);
-      padding: 11px; font-size: 14px; font-weight: 500;
-      font-family: inherit; cursor: pointer; width: 100%; margin-top: 10px;
-      transition: background 0.15s;
-    }
-    .wsp-btn:hover { background: #1ebe5d; }
+    .res-dia { font-size: 14px; font-weight: 500; } .res-tip { font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
+    .wsp-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: #25D366; color: white; border: none; border-radius: var(--radius-sm); padding: 11px; font-size: 14px; font-weight: 500; font-family: inherit; cursor: pointer; width: 100%; margin-top: 10px; }
     .wsp-btn svg { width: 18px; height: 18px; fill: white; flex-shrink: 0; }
-
     .small-link { font-size: 12px; color: var(--accent); cursor: pointer; text-decoration: underline; }
-    .center { text-align: center; }
-    .mt1 { margin-top: 0.75rem; }
-    .mt2 { margin-top: 1.25rem; }
-
-    /* admin */
-    .admin-header {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 1.25rem;
-    }
-    .admin-header h2 { font-size: 15px; font-weight: 600; }
-    .admin-header p  { font-size: 12px; color: var(--text-secondary); }
-
+    .center { text-align: center; } .mt1 { margin-top: 0.75rem; } .mt2 { margin-top: 1.25rem; }
     .nav-tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 1.25rem; }
     .tab { padding: 8px 16px; font-size: 13px; cursor: pointer; color: var(--text-secondary); border-bottom: 2px solid transparent; font-family: inherit; background: none; border-top: none; border-left: none; border-right: none; }
     .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-
     .turno-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
     .turno-row:last-child { border-bottom: none; }
     .badge { display: inline-block; font-size: 11px; padding: 2px 9px; border-radius: 99px; background: var(--success-light); color: var(--success); font-weight: 500; }
-
     .slot-row { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
     .slot-row:last-child { border-bottom: none; }
     .slot-row input { width: 58px; text-align: center; font-size: 14px; padding: 5px 8px; }
-
     .feriado-tag { display: inline-flex; align-items: center; gap: 6px; background: var(--warning-light); color: var(--warning-text); border: 1px solid var(--warning-border); border-radius: var(--radius-sm); padding: 4px 10px; font-size: 12px; margin: 3px; }
     .feriado-tag button { background: none; border: none; cursor: pointer; color: var(--warning-text); font-size: 15px; padding: 0; line-height: 1; font-family: inherit; }
-
     .empty { text-align: center; color: var(--text-hint); font-size: 13px; padding: 2rem 0; }
-
+    .loading { text-align: center; color: var(--text-hint); font-size: 13px; padding: 1rem 0; }
+    .admin-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
+    .admin-header h2 { font-size: 15px; font-weight: 600; } .admin-header p { font-size: 12px; color: var(--text-secondary); }
     footer { margin-top: 2.5rem; font-size: 11px; color: var(--text-hint); text-align: center; }
   </style>
 </head>
 <body>
-
   <div class="logo-bar">
     <div class="logo-icon">
       <svg viewBox="0 0 24 24"><path d="M5 8h14M5 8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v.01a2 2 0 0 1-2 2M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8"/><path d="m10 12 2 2 4-4"/></svg>
     </div>
-    <div class="logo-text">
-      <h1>Steel SRL</h1>
-      <p>Retiro de mercadería por local</p>
-    </div>
+    <div class="logo-text"><h1>Steel SRL</h1><p>Retiro de mercadería por local</p></div>
   </div>
 
   <div class="container">
-
-    <!-- ===== PANTALLA CLIENTE ===== -->
+    <!-- CLIENTE -->
     <div id="screen-client" class="screen active">
-
       <div id="client-form">
         <div class="card">
           <div class="step-label">Paso 1 — Número de pedido</div>
@@ -276,83 +99,67 @@
           <input type="text" id="comp-input" placeholder="Ej: 123456" inputmode="numeric" autocomplete="off" />
           <p class="msg-err" id="err-comp">Ingresá el número de pedido.</p>
         </div>
-
         <div class="card">
           <div class="step-label">Paso 2 — Elegí el día</div>
           <div class="dias-grid" id="dias-grid"></div>
           <p class="msg-err" id="err-dia">Seleccioná un día para continuar.</p>
         </div>
-
         <div class="card card-disabled" id="card-turnos">
           <div class="step-label">Paso 3 — Elegí el horario</div>
           <div class="turnos-grid" id="turnos-grid"></div>
           <p class="msg-err" id="err-turno">Seleccioná un turno disponible.</p>
         </div>
-
         <button class="primary" onclick="confirmarTurno()">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           Confirmar turno
         </button>
-
-        <div class="mt2 center">
-          <span class="small-link" onclick="showAdmin()">Acceso administración →</span>
-        </div>
+        <div class="mt2 center"><span class="small-link" onclick="showAdmin()">Acceso administración →</span></div>
       </div>
-
       <div id="client-result" style="display:none;">
         <div class="result-card">
-          <div class="res-label">Tu turno de retiro</div>
+          <div style="font-size:13px;color:var(--success);">Tu turno de retiro</div>
           <div class="res-hora" id="res-hora">—</div>
-          <div class="res-dia"  id="res-dia">—</div>
-          <div class="res-tip"  id="res-tip"></div>
+          <div class="res-dia" id="res-dia">—</div>
+          <div class="res-tip" id="res-tip"></div>
         </div>
         <div class="card">
-          <div style="font-size:13px; color:var(--text-secondary); margin-bottom:10px;">Pedido n.º <strong id="res-comp" style="color:var(--text-primary);"></strong></div>
-          <div style="font-size:13px; color:var(--text-secondary); line-height:1.6;">Tu pedido estará listo al final del turno. Pasá a retirarlo por local.</div>
+          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px;">Pedido n.º <strong id="res-comp" style="color:var(--text-primary);"></strong></div>
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.6;">Tu pedido estará listo al final del turno. Pasá a retirarlo por local.</div>
           <button class="wsp-btn" onclick="compartirWsp()">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
             Compartir turno por WhatsApp
           </button>
-          <div class="mt1 center">
-            <span class="small-link" onclick="resetCliente()">Registrar otro pedido</span>
-          </div>
+          <div class="mt1 center"><span class="small-link" onclick="resetCliente()">Registrar otro pedido</span></div>
         </div>
       </div>
     </div>
 
-    <!-- ===== PANTALLA LOGIN ===== -->
+    <!-- LOGIN -->
     <div id="screen-login" class="screen">
       <div class="card">
-        <div style="font-size:15px; font-weight:600; margin-bottom:16px;">Administración</div>
+        <div style="font-size:15px;font-weight:600;margin-bottom:16px;">Administración</div>
         <label for="pass-input">Contraseña</label>
         <input type="password" id="pass-input" placeholder="••••••••" />
         <p class="msg-err" id="err-pass">Contraseña incorrecta.</p>
         <button class="primary" style="margin-top:12px;" onclick="doLogin()">Ingresar</button>
-        <div class="mt1 center">
-          <span class="small-link" onclick="showScreen('screen-client')">← Volver al inicio</span>
-        </div>
+        <div class="mt1 center"><span class="small-link" onclick="showScreen('screen-client')">← Volver al inicio</span></div>
       </div>
     </div>
 
-    <!-- ===== PANTALLA ADMIN ===== -->
+    <!-- ADMIN -->
     <div id="screen-admin" class="screen">
       <div class="admin-header">
-        <div>
-          <h2>Panel de administración</h2>
-          <p id="admin-fecha">—</p>
-        </div>
+        <div><h2>Panel de administración</h2><p id="admin-fecha">—</p></div>
         <button class="secondary" onclick="doLogout()">Salir</button>
       </div>
-
       <div class="nav-tabs">
         <button class="tab active" onclick="switchTab('tab-turnos',this)">Turnos del día</button>
         <button class="tab" onclick="switchTab('tab-config',this)">Configuración</button>
       </div>
-
       <div id="tab-turnos">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
-          <span style="font-size:13px; color:var(--text-secondary);">Filtrar por turno:</span>
-          <select id="filtro-turno" onchange="renderTurnos()" style="font-size:13px; padding:5px 8px; border-radius:6px; border:1px solid var(--border-strong); background:var(--surface); color:var(--text-primary); cursor:pointer; font-family:inherit;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
+          <span style="font-size:13px;color:var(--text-secondary);">Filtrar:</span>
+          <select id="filtro-turno" onchange="renderTurnos()" style="font-size:13px;padding:5px 8px;border-radius:6px;border:1px solid var(--border-strong);background:var(--surface);color:var(--text-primary);cursor:pointer;font-family:inherit;">
             <option value="all">Todos</option>
             <option value="0">8:30 – 10:30</option>
             <option value="1">10:30 – 12:30</option>
@@ -360,270 +167,307 @@
             <option value="3">14:30 – 16:30</option>
           </select>
         </div>
-        <div class="card" id="lista-turnos"></div>
+        <div class="card" id="lista-turnos"><div class="loading">Cargando...</div></div>
         <button class="danger" onclick="limpiarTurnos()">Limpiar turnos del día</button>
       </div>
-
       <div id="tab-config" style="display:none;">
         <div class="card">
-          <div style="font-size:14px; font-weight:600; margin-bottom:12px;">Límite de pedidos por turno</div>
+          <div style="font-size:14px;font-weight:600;margin-bottom:12px;">Límite de pedidos por turno</div>
           <div id="slots-config"></div>
         </div>
         <div class="card">
-          <div style="font-size:14px; font-weight:600; margin-bottom:12px;">Feriados</div>
+          <div style="font-size:14px;font-weight:600;margin-bottom:12px;">Feriados</div>
           <div id="feriados-lista"></div>
-          <div style="display:flex; gap:8px; margin-top:12px; align-items:center;">
+          <div style="display:flex;gap:8px;margin-top:12px;align-items:center;">
             <input type="text" id="nuevo-feriado" placeholder="YYYY-MM-DD" style="width:160px;" />
             <button class="secondary" onclick="agregarFeriado()">+ Agregar</button>
           </div>
           <p class="msg-err" id="err-feriado-admin">Formato inválido. Usá YYYY-MM-DD.</p>
         </div>
         <div class="card">
-          <div style="font-size:14px; font-weight:600; margin-bottom:12px;">Contraseña de acceso</div>
-          <div style="display:flex; gap:8px; align-items:center;">
+          <div style="font-size:14px;font-weight:600;margin-bottom:12px;">Contraseña de acceso</div>
+          <div style="display:flex;gap:8px;align-items:center;">
             <input type="password" id="nueva-pass" placeholder="Nueva contraseña" />
             <button class="secondary" onclick="cambiarPass()">Guardar</button>
           </div>
-          <p id="pass-ok" style="font-size:12.5px; color:var(--success); margin-top:6px; display:none;">✓ Contraseña actualizada.</p>
+          <p id="pass-ok" style="font-size:12.5px;margin-top:6px;display:none;"></p>
         </div>
       </div>
     </div>
-
   </div>
-
   <footer>Steel SRL &mdash; Sistema de turnos de retiro</footer>
 
-<script>
-const TURNOS_DEF = [
-  { label: "8:30 – 10:30",  fin: 10*60+30 },
-  { label: "10:30 – 12:30", fin: 12*60+30 },
-  { label: "12:30 – 14:30", fin: 14*60+30 },
-  { label: "14:30 – 16:30", fin: 16*60+30 },
-];
-const DIAS_CORTOS = ["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
-const MESES = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getDatabase, ref, set, get, remove, onValue, push } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-function pad(n){ return String(n).padStart(2,'0'); }
-function loadConfig(){ try{ return JSON.parse(localStorage.getItem('r_config'))||[5,5,5,5]; }catch{ return [5,5,5,5]; } }
-function saveConfig(c){ localStorage.setItem('r_config', JSON.stringify(c)); }
-function loadFeriados(){ try{ return JSON.parse(localStorage.getItem('r_feriados'))||[]; }catch{ return []; } }
-function saveFeriados(f){ localStorage.setItem('r_feriados', JSON.stringify(f)); }
-function loadTurnos(){ try{ return JSON.parse(localStorage.getItem('r_turnos'))||[]; }catch{ return []; } }
-function saveTurnos(t){ localStorage.setItem('r_turnos', JSON.stringify(t)); }
-function getPass(){ return localStorage.getItem('r_pass')||'admin123'; }
+  const firebaseConfig = {
+    apiKey: "AIzaSyC_b8cCh0cXtRpVBydRoUbSmN0N1Np-Pa0",
+    authDomain: "steel-retiro.firebaseapp.com",
+    databaseURL: "https://steel-retiro-default-rtdb.firebaseio.com",
+    projectId: "steel-retiro",
+    storageBucket: "steel-retiro.firebasestorage.app",
+    messagingSenderId: "612937749463",
+    appId: "1:612937749463:web:7956237c793d32a9e3f192"
+  };
 
-function dateStr(d){ return d.toISOString().slice(0,10); }
-function formatFechaLarga(ds){
-  const d = new Date(ds+'T12:00:00');
-  return `${DIAS_CORTOS[d.getDay()]} ${d.getDate()} de ${MESES[d.getMonth()]}`;
-}
-function esHabil(ds){
-  const d = new Date(ds+'T12:00:00');
-  const dow = d.getDay();
-  return dow!==0 && dow!==6 && !loadFeriados().includes(ds);
-}
+  const app = initializeApp(firebaseConfig);
+  const db  = getDatabase(app);
 
-function showScreen(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-function showAdmin(){ showScreen('screen-login'); }
-function doLogin(){
-  const v = document.getElementById('pass-input').value;
-  const err = document.getElementById('err-pass');
-  if(v===getPass()){
+  const TURNOS_DEF = [
+    { label: "8:30 – 10:30",  fin: 10*60+30 },
+    { label: "10:30 – 12:30", fin: 12*60+30 },
+    { label: "12:30 – 14:30", fin: 14*60+30 },
+    { label: "14:30 – 16:30", fin: 16*60+30 },
+  ];
+  const DIAS_CORTOS = ["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
+  const MESES = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function dateStr(d){ return d.toISOString().slice(0,10); }
+  function formatFechaLarga(ds){
+    const d = new Date(ds+'T12:00:00');
+    return `${DIAS_CORTOS[d.getDay()]} ${d.getDate()} de ${MESES[d.getMonth()]}`;
+  }
+
+  async function fbGet(path){ const s=await get(ref(db,path)); return s.exists()?s.val():null; }
+  async function fbSet(path,val){ await set(ref(db,path),val); }
+  async function fbRemove(path){ await remove(ref(db,path)); }
+
+  async function getConfig(){ const c=await fbGet('config/limites'); return c||[5,5,5,5]; }
+  async function setConfig(c){ await fbSet('config/limites',c); }
+  async function getFeriados(){ const f=await fbGet('config/feriados'); return f?Object.values(f):[]; }
+  async function getTurnosDelDia(dia){ const t=await fbGet('turnos/'+dia); return t?Object.values(t):[]; }
+  async function getPass(){ const p=await fbGet('config/pass'); return p||'admin123'; }
+
+  // Regla: el turno 8:30 del día siguiente se bloquea a las 17:00 del día anterior
+  function turnoEsBloqueado(ds, turnoIdx){
+    if(turnoIdx !== 0) return false;
+    const now = new Date();
+    const hoy = dateStr(now);
+    const dTarget = new Date(ds+'T12:00:00');
+    const dAnterior = new Date(dTarget);
+    dAnterior.setDate(dAnterior.getDate()-1);
+    const dsAnterior = dateStr(dAnterior);
+    return hoy === dsAnterior && now.getHours() >= 17;
+  }
+
+  function esHabil(ds, feriados){
+    const d = new Date(ds+'T12:00:00');
+    const dow = d.getDay();
+    return dow!==0 && dow!==6 && !feriados.includes(ds);
+  }
+
+  function showScreen(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+  function showAdmin(){ showScreen('screen-login'); }
+
+  async function doLogin(){
+    const v=document.getElementById('pass-input').value;
+    const err=document.getElementById('err-pass');
+    const pass=await getPass();
+    if(v===pass){ err.style.display='none'; document.getElementById('pass-input').value=''; initAdmin(); showScreen('screen-admin'); }
+    else { err.style.display='block'; }
+  }
+  function doLogout(){ showScreen('screen-client'); }
+
+  let selDia=null, selTurno=null;
+
+  async function buildDias(){
+    const feriados=await getFeriados();
+    const grid=document.getElementById('dias-grid');
+    grid.innerHTML='';
+    const hoy=new Date();
+    for(let i=0;i<10;i++){
+      const d=new Date(hoy); d.setDate(hoy.getDate()+i);
+      const ds=dateStr(d);
+      const habil=esHabil(ds,feriados);
+      const div=document.createElement('div');
+      div.className='dia-btn'+(habil?'':' disabled');
+      div.innerHTML=`<div class="dia-nombre">${DIAS_CORTOS[d.getDay()]}</div><div class="dia-num">${d.getDate()}</div>`;
+      if(habil) div.onclick=()=>selectDia(ds,div);
+      grid.appendChild(div);
+    }
+  }
+
+  async function selectDia(ds,el){
+    selDia=ds; selTurno=null;
+    document.querySelectorAll('.dia-btn').forEach(b=>b.classList.remove('selected'));
+    el.classList.add('selected');
+    document.getElementById('err-dia').style.display='none';
+    document.getElementById('card-turnos').classList.remove('card-disabled');
+    await buildTurnos(ds);
+  }
+
+  async function buildTurnos(ds){
+    const grid=document.getElementById('turnos-grid');
+    grid.innerHTML='<div class="loading">Cargando turnos...</div>';
+    const config=await getConfig();
+    const todos=await getTurnosDelDia(ds);
+    const hoy=dateStr(new Date());
+    const ahora=new Date().getHours()*60+new Date().getMinutes();
+    grid.innerHTML=TURNOS_DEF.map((t,i)=>{
+      const ocupados=todos.filter(x=>x.turnoIdx===i).length;
+      const lleno=ocupados>=config[i];
+      const pasado=ds===hoy && t.fin<=ahora;
+      const bloqueado=turnoEsBloqueado(ds,i);
+      const noDisp=lleno||pasado||bloqueado;
+      let capTxt='';
+      if(lleno) capTxt='Completo';
+      else if(pasado) capTxt='Turno pasado';
+      else if(bloqueado) capTxt='No disponible';
+      return `<div class="turno-btn${noDisp?' lleno':''}" onclick="window._selTurno(${i},this)">
+        <div class="turno-hora">${t.label}</div>
+        ${capTxt?`<div class="turno-cap">${capTxt}</div>`:''}
+      </div>`;
+    }).join('');
+  }
+
+  window._selTurno = function(idx,el){
+    selTurno=idx;
+    document.querySelectorAll('.turno-btn').forEach(b=>b.classList.remove('selected'));
+    el.classList.add('selected');
+    document.getElementById('err-turno').style.display='none';
+  };
+
+  async function confirmarTurno(){
+    const comp=document.getElementById('comp-input').value.trim();
+    let ok=true;
+    ['err-comp','err-dia','err-turno'].forEach(id=>document.getElementById(id).style.display='none');
+    if(!comp){ document.getElementById('err-comp').style.display='block'; ok=false; }
+    if(!selDia){ document.getElementById('err-dia').style.display='block'; ok=false; }
+    if(selTurno===null){ document.getElementById('err-turno').style.display='block'; ok=false; }
+    if(!ok) return;
+    const turnosRef=ref(db,'turnos/'+selDia);
+    const snap=await get(turnosRef);
+    const existing=snap.exists()?Object.values(snap.val()):[];
+    if(!existing.find(x=>x.comp===comp && x.turnoIdx===selTurno)){
+      await push(turnosRef,{ comp, turnoIdx:selTurno, ts:new Date().toISOString() });
+    }
+    const t=TURNOS_DEF[selTurno];
+    const finH=Math.floor(t.fin/60), finM=t.fin%60;
+    document.getElementById('res-hora').textContent=t.label;
+    document.getElementById('res-dia').textContent=formatFechaLarga(selDia);
+    document.getElementById('res-comp').textContent=comp;
+    document.getElementById('res-tip').textContent=`Pasá a buscarlo cerca de las ${pad(finH)}:${pad(finM)} hs.`;
+    window._ta={ comp, dia:selDia, turnoLabel:t.label, hora:`${pad(finH)}:${pad(finM)}` };
+    document.getElementById('client-form').style.display='none';
+    document.getElementById('client-result').style.display='block';
+  }
+
+  function compartirWsp(){
+    const d=window._ta; if(!d) return;
+    const txt=`✅ *Steel SRL – Retiro de mercadería*\n\nPedido n.º: *${d.comp}*\nDía: ${formatFechaLarga(d.dia)}\nHorario: *${d.turnoLabel}*\n\nPasá a buscar tu pedido cerca de las ${d.hora} hs.\n📍 Retiro por local.`;
+    window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank');
+  }
+
+  async function resetCliente(){
+    selDia=null; selTurno=null;
+    document.getElementById('comp-input').value='';
+    document.getElementById('client-form').style.display='block';
+    document.getElementById('client-result').style.display='none';
+    document.getElementById('card-turnos').classList.add('card-disabled');
+    document.querySelectorAll('.dia-btn').forEach(b=>b.classList.remove('selected'));
+    await buildDias();
+  }
+
+  async function initAdmin(){
+    const now=new Date();
+    document.getElementById('admin-fecha').textContent=formatFechaLarga(dateStr(now))+' – '+pad(now.getHours())+':'+pad(now.getMinutes())+' hs';
+    renderTurnos(); renderConfig(); renderFeriados();
+  }
+
+  function switchTab(tabId,el){
+    ['tab-turnos','tab-config'].forEach(id=>document.getElementById(id).style.display='none');
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.getElementById(tabId).style.display='block';
+    el.classList.add('active');
+  }
+
+  let unsubTurnos=null;
+  async function renderTurnos(){
+    const filtro=document.getElementById('filtro-turno').value;
+    const hoy=dateStr(new Date());
+    const cont=document.getElementById('lista-turnos');
+    cont.innerHTML='<div class="loading">Cargando...</div>';
+    if(unsubTurnos) unsubTurnos();
+    unsubTurnos=onValue(ref(db,'turnos/'+hoy),snap=>{
+      const todos=snap.exists()?Object.values(snap.val()):[];
+      const fil=filtro==='all'?todos:todos.filter(x=>String(x.turnoIdx)===filtro);
+      if(fil.length===0){ cont.innerHTML='<div class="empty">Sin turnos registrados hoy.</div>'; return; }
+      // ordenar por turno
+      fil.sort((a,b)=>a.turnoIdx-b.turnoIdx);
+      cont.innerHTML=fil.map(x=>{
+        const t=TURNOS_DEF[x.turnoIdx];
+        return `<div class="turno-row">
+          <div><div style="font-weight:500;">Pedido ${x.comp}</div><div style="color:var(--text-secondary);font-size:12px;">${t.label}</div></div>
+          <span class="badge">${t.label.split('–')[1].trim()}</span>
+        </div>`;
+      }).join('');
+    });
+  }
+
+  async function renderConfig(){
+    const config=await getConfig();
+    document.getElementById('slots-config').innerHTML=TURNOS_DEF.map((t,i)=>
+      `<div class="slot-row"><span>${t.label}</span>
+        <div style="display:flex;align-items:center;gap:7px;">
+          <span style="font-size:12px;color:var(--text-secondary);">máx.</span>
+          <input type="number" min="1" max="99" value="${config[i]}" onchange="window._updateSlot(${i},this.value)" />
+          <span style="font-size:12px;color:var(--text-secondary);">pedidos</span>
+        </div>
+      </div>`
+    ).join('');
+  }
+
+  window._updateSlot=async function(i,val){ const c=await getConfig(); c[i]=parseInt(val)||1; await setConfig(c); };
+
+  async function renderFeriados(){
+    const f=await getFeriados();
+    const cont=document.getElementById('feriados-lista');
+    if(f.length===0){ cont.innerHTML='<div style="font-size:13px;color:var(--text-hint);">Sin feriados configurados.</div>'; return; }
+    cont.innerHTML=f.map(d=>`<span class="feriado-tag">${formatFechaLarga(d)} <button onclick="window._quitarFeriado('${d}')">×</button></span>`).join('');
+  }
+
+  window._agregarFeriado=async function(){
+    const val=document.getElementById('nuevo-feriado').value.trim();
+    const err=document.getElementById('err-feriado-admin');
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(val)){ err.style.display='block'; return; }
     err.style.display='none';
-    document.getElementById('pass-input').value='';
-    initAdmin();
-    showScreen('screen-admin');
-  } else { err.style.display='block'; }
-}
-function doLogout(){ showScreen('screen-client'); }
+    const f=await getFeriados();
+    if(!f.includes(val)){ f.push(val); const obj={}; f.forEach((d,i)=>obj[i]=d); await fbSet('config/feriados',obj); }
+    document.getElementById('nuevo-feriado').value='';
+    renderFeriados();
+  };
 
-let selDia=null, selTurno=null;
+  window._quitarFeriado=async function(d){
+    const f=(await getFeriados()).filter(x=>x!==d);
+    const obj={}; f.forEach((dd,i)=>obj[i]=dd);
+    await fbSet('config/feriados',obj);
+    renderFeriados();
+  };
 
-function buildDias(){
-  const grid = document.getElementById('dias-grid');
-  grid.innerHTML='';
-  const hoy = new Date();
-  for(let i=0; i<10; i++){
-    const d = new Date(hoy);
-    d.setDate(hoy.getDate()+i);
-    const ds = dateStr(d);
-    const habil = esHabil(ds);
-    const div = document.createElement('div');
-    div.className = 'dia-btn'+(habil?'':' disabled');
-    div.innerHTML = `<div class="dia-nombre">${DIAS_CORTOS[d.getDay()]}</div><div class="dia-num">${d.getDate()}</div>`;
-    if(habil) div.onclick = ()=>selectDia(ds, div);
-    grid.appendChild(div);
-  }
-}
+  window._limpiarTurnos=async function(){
+    if(!confirm('¿Limpiar todos los turnos del día?')) return;
+    await fbRemove('turnos/'+dateStr(new Date()));
+  };
 
-function selectDia(ds, el){
-  selDia=ds; selTurno=null;
-  document.querySelectorAll('.dia-btn').forEach(b=>b.classList.remove('selected'));
-  el.classList.add('selected');
-  document.getElementById('err-dia').style.display='none';
-  const ct = document.getElementById('card-turnos');
-  ct.classList.remove('card-disabled');
-  buildTurnos(ds);
-}
+  window._cambiarPass=async function(){
+    const v=document.getElementById('nueva-pass').value;
+    const el=document.getElementById('pass-ok');
+    if(v.length<4){ el.textContent='Mínimo 4 caracteres.'; el.style.color='var(--danger)'; el.style.display='block'; return; }
+    await fbSet('config/pass',v);
+    document.getElementById('nueva-pass').value='';
+    el.textContent='✓ Contraseña actualizada.'; el.style.color='var(--success)'; el.style.display='block';
+  };
 
-function buildTurnos(ds){
-  const grid = document.getElementById('turnos-grid');
-  const config = loadConfig();
-  const todos = loadTurnos();
-  const hoy = dateStr(new Date());
-  const ahora = new Date().getHours()*60+new Date().getMinutes();
-  grid.innerHTML = TURNOS_DEF.map((t,i)=>{
-    const ocupados = todos.filter(x=>x.dia===ds && x.turnoIdx===i).length;
-    const lleno = ocupados>=config[i];
-    const pasado = ds===hoy && t.fin<=ahora;
-    const noDisp = lleno||pasado;
-    const capTxt = lleno?'Completo':(pasado?'Turno pasado':'');
-    return `<div class="turno-btn${noDisp?' lleno':''}" onclick="selectTurno(${i},this)">
-      <div class="turno-hora">${t.label}</div>
-      ${capTxt?`<div class="turno-cap">${capTxt}</div>`:''}
-    </div>`;
-  }).join('');
-}
+  // Exponer funciones al HTML
+  window.showScreen=showScreen; window.showAdmin=showAdmin; window.doLogin=doLogin; window.doLogout=doLogout;
+  window.confirmarTurno=confirmarTurno; window.compartirWsp=compartirWsp; window.resetCliente=resetCliente;
+  window.switchTab=switchTab; window.renderTurnos=renderTurnos;
+  window.agregarFeriado=window._agregarFeriado; window.quitarFeriado=window._quitarFeriado;
+  window.limpiarTurnos=window._limpiarTurnos; window.cambiarPass=window._cambiarPass;
 
-function selectTurno(idx, el){
-  selTurno=idx;
-  document.querySelectorAll('.turno-btn').forEach(b=>b.classList.remove('selected'));
-  el.classList.add('selected');
-  document.getElementById('err-turno').style.display='none';
-}
-
-function confirmarTurno(){
-  const comp = document.getElementById('comp-input').value.trim();
-  let ok=true;
-  ['err-comp','err-dia','err-turno'].forEach(id=>document.getElementById(id).style.display='none');
-  if(!comp){ document.getElementById('err-comp').style.display='block'; ok=false; }
-  if(!selDia){ document.getElementById('err-dia').style.display='block'; ok=false; }
-  if(selTurno===null){ document.getElementById('err-turno').style.display='block'; ok=false; }
-  if(!ok) return;
-
-  const todos = loadTurnos();
-  if(!todos.find(x=>x.comp===comp && x.dia===selDia && x.turnoIdx===selTurno)){
-    todos.push({ comp, dia:selDia, turnoIdx:selTurno, ts:new Date().toISOString() });
-    saveTurnos(todos);
-  }
-
-  const t = TURNOS_DEF[selTurno];
-  const finH=Math.floor(t.fin/60), finM=t.fin%60;
-  document.getElementById('res-hora').textContent = t.label;
-  document.getElementById('res-dia').textContent  = formatFechaLarga(selDia);
-  document.getElementById('res-comp').textContent = comp;
-  document.getElementById('res-tip').textContent  = `Pasá a buscarlo cerca de las ${pad(finH)}:${pad(finM)} hs.`;
-  window._ta = { comp, dia:selDia, turnoLabel:t.label, hora:`${pad(finH)}:${pad(finM)}` };
-
-  document.getElementById('client-form').style.display='none';
-  document.getElementById('client-result').style.display='block';
-}
-
-function compartirWsp(){
-  const d=window._ta; if(!d) return;
-  const txt=`✅ *Steel SRL – Retiro de mercadería*\n\nPedido n.º: *${d.comp}*\nDía: ${formatFechaLarga(d.dia)}\nHorario: *${d.turnoLabel}*\n\nPasá a buscar tu pedido cerca de las ${d.hora} hs.\n📍 Retiro por local.`;
-  window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank');
-}
-
-function resetCliente(){
-  selDia=null; selTurno=null;
-  document.getElementById('comp-input').value='';
-  document.getElementById('client-form').style.display='block';
-  document.getElementById('client-result').style.display='none';
-  document.getElementById('card-turnos').classList.add('card-disabled');
-  document.querySelectorAll('.dia-btn').forEach(b=>b.classList.remove('selected'));
   buildDias();
-}
-
-function initAdmin(){
-  const now=new Date();
-  document.getElementById('admin-fecha').textContent=formatFechaLarga(dateStr(now))+' – '+pad(now.getHours())+':'+pad(now.getMinutes())+' hs';
-  renderTurnos(); renderConfig(); renderFeriados();
-}
-
-function switchTab(tabId, el){
-  ['tab-turnos','tab-config'].forEach(id=>document.getElementById(id).style.display='none');
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById(tabId).style.display='block';
-  el.classList.add('active');
-}
-
-function renderTurnos(){
-  const filtro=document.getElementById('filtro-turno').value;
-  const hoy=dateStr(new Date());
-  const todos=loadTurnos().filter(x=>x.dia===hoy);
-  const fil=filtro==='all'?todos:todos.filter(x=>String(x.turnoIdx)===filtro);
-  const cont=document.getElementById('lista-turnos');
-  if(fil.length===0){ cont.innerHTML='<div class="empty">Sin turnos registrados hoy.</div>'; return; }
-  cont.innerHTML=fil.map(x=>{
-    const t=TURNOS_DEF[x.turnoIdx];
-    return `<div class="turno-row">
-      <div>
-        <div style="font-weight:500;">Pedido ${x.comp}</div>
-        <div style="color:var(--text-secondary);font-size:12px;">${t.label}</div>
-      </div>
-      <span class="badge">${t.label.split('–')[1].trim()}</span>
-    </div>`;
-  }).join('');
-}
-
-function renderConfig(){
-  const config=loadConfig();
-  document.getElementById('slots-config').innerHTML=TURNOS_DEF.map((t,i)=>
-    `<div class="slot-row">
-      <span>${t.label}</span>
-      <div style="display:flex;align-items:center;gap:7px;">
-        <span style="font-size:12px;color:var(--text-secondary);">máx.</span>
-        <input type="number" min="1" max="99" value="${config[i]}" onchange="updateSlot(${i},this.value)" />
-        <span style="font-size:12px;color:var(--text-secondary);">pedidos</span>
-      </div>
-    </div>`
-  ).join('');
-}
-
-function updateSlot(i,val){ const c=loadConfig(); c[i]=parseInt(val)||1; saveConfig(c); }
-
-function renderFeriados(){
-  const f=loadFeriados();
-  const cont=document.getElementById('feriados-lista');
-  if(f.length===0){ cont.innerHTML='<div style="font-size:13px;color:var(--text-hint);">Sin feriados configurados.</div>'; return; }
-  cont.innerHTML=f.map(d=>`<span class="feriado-tag">${formatFechaLarga(d)} <button onclick="quitarFeriado('${d}')" title="Quitar">×</button></span>`).join('');
-}
-
-function agregarFeriado(){
-  const val=document.getElementById('nuevo-feriado').value.trim();
-  const err=document.getElementById('err-feriado-admin');
-  if(!/^\d{4}-\d{2}-\d{2}$/.test(val)){ err.style.display='block'; return; }
-  err.style.display='none';
-  const f=loadFeriados();
-  if(!f.includes(val)){ f.push(val); saveFeriados(f); }
-  document.getElementById('nuevo-feriado').value='';
-  renderFeriados();
-}
-
-function quitarFeriado(d){ saveFeriados(loadFeriados().filter(x=>x!==d)); renderFeriados(); }
-
-function limpiarTurnos(){
-  if(!confirm('¿Limpiar todos los turnos del día?')) return;
-  saveTurnos(loadTurnos().filter(x=>x.dia!==dateStr(new Date())));
-  renderTurnos();
-}
-
-function cambiarPass(){
-  const v=document.getElementById('nueva-pass').value;
-  const el=document.getElementById('pass-ok');
-  if(v.length<4){ el.textContent='Mínimo 4 caracteres.'; el.style.color='var(--danger)'; el.style.display='block'; return; }
-  localStorage.setItem('r_pass',v);
-  document.getElementById('nueva-pass').value='';
-  el.textContent='✓ Contraseña actualizada.';
-  el.style.color='var(--success)';
-  el.style.display='block';
-}
-
-buildDias();
 </script>
 </body>
 </html>
