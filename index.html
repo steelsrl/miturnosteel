@@ -238,11 +238,25 @@
       </div>
     </div>
   </div>
+  <div id="modal-limpiar" class="modal-overlay" style="display:none;">
+    <div class="modal-box">
+      <div class="modal-title">⚠️ Limpiar turnos del día</div>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">Esto borrará <strong>todos</strong> los turnos de hoy. Ingresá la contraseña de administración para confirmar.</p>
+      <label for="pass-limpiar">Contraseña</label>
+      <input type="password" id="pass-limpiar" placeholder="••••••••" style="margin-bottom:0;" />
+      <p class="msg-err" id="err-limpiar">Contraseña incorrecta.</p>
+      <div class="modal-btns">
+        <button class="secondary" onclick="cerrarModalLimpiar()">Cancelar</button>
+        <button style="flex:1;padding:11px;background:var(--danger);color:white;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:500;font-family:inherit;cursor:pointer;" onclick="confirmarLimpiar()">Sí, limpiar</button>
+      </div>
+    </div>
+  </div>
+
   <div id="modal-entregar" class="modal-overlay" style="display:none;">
     <div class="modal-box">
       <div class="modal-title">Registrar entrega</div>
       <label for="remito-input">Número de remito</label>
-      <input type="text" id="remito-input" placeholder="Ej: 0001-00012345" inputmode="numeric" style="margin-bottom:0;" />
+      <input type="text" id="remito-input" placeholder="Número de remito" inputmode="numeric" style="margin-bottom:0;" />
       <p class="msg-err" id="err-remito">Ingresá el número de remito.</p>
       <div class="modal-btns">
         <button class="secondary" onclick="cerrarModal()">Cancelar</button>
@@ -432,7 +446,7 @@
     document.getElementById('res-comp').textContent=comp;
     document.getElementById('res-facturado').textContent=facturado;
     document.getElementById('res-retira').textContent=retira||'—';
-    document.getElementById('res-tip').textContent=`Pasá a buscarlo cerca de las ${pad(finH)}:${pad(finM)} hs.`;
+    document.getElementById('res-tip').textContent=`Pasá a retirarlo dentro de la franja horaria seleccionada.`;
     window._ta={ comp, facturado, retira, dia:selDia, turnoLabel:t.label, hora:`${pad(finH)}:${pad(finM)}` };
 
     document.getElementById('client-form').style.display='none';
@@ -443,7 +457,7 @@
     const d=window._ta; if(!d) return;
     const wspNum = await getWspNumber();
     const retiraStr = d.retira ? `\nRetirado por: *${d.retira}*` : '';
-    const txt=`✅ *Steel SRL – Retiro de mercadería*\n\nPedido n.º: *${d.comp}*\nFacturado a: *${d.facturado}*${retiraStr}\nDía: ${formatFechaLarga(d.dia)}\nFranja horaria: *${d.turnoLabel}*\n\nPasá a buscar tu pedido cerca de las ${d.hora} hs.\n📍 Retirá por galpón, 25 de Mayo 2024.\n\n🔧 *Recordá:* si tenés material de ferretería, pasá por el local de la esquina.`;
+    const txt=`✅ *Steel SRL – Retiro de mercadería*\n\nPedido n.º: *${d.comp}*\nFacturado a: *${d.facturado}*${retiraStr}\nDía: ${formatFechaLarga(d.dia)}\nFranja horaria: *${d.turnoLabel}*\n\nPasá a buscar tu pedido dentro de la franja horaria solicitada.\n📍 Retirá por galpón, 25 de Mayo 2024.\n\n🔧 *Recordá:* si tenés material de ferretería, pasá por el local de la esquina.`;
     const url = wspNum
       ? `https://wa.me/${wspNum}?text=${encodeURIComponent(txt)}`
       : `https://wa.me/?text=${encodeURIComponent(txt)}`;
@@ -545,9 +559,22 @@
     renderFeriados();
   };
 
-  window._limpiarTurnos=async function(){
-    if(!confirm('¿Limpiar todos los turnos del día?')) return;
+  window._limpiarTurnos=function(){
+    document.getElementById('pass-limpiar').value='';
+    document.getElementById('err-limpiar').style.display='none';
+    document.getElementById('modal-limpiar').style.display='flex';
+  };
+
+  window.cerrarModalLimpiar=function(){
+    document.getElementById('modal-limpiar').style.display='none';
+  };
+
+  window.confirmarLimpiar=async function(){
+    const v = document.getElementById('pass-limpiar').value;
+    const pass = await getPass();
+    if(v !== pass){ document.getElementById('err-limpiar').style.display='block'; return; }
     await fbRemove('turnos/'+dateStr(new Date()));
+    cerrarModalLimpiar();
   };
 
   window._cambiarPass=async function(){
@@ -592,7 +619,8 @@
   };
 
   window.confirmarEntrega = async function(){
-    const remito = document.getElementById('remito-input').value.trim();
+    const remito = document.getElementById('remito-input').value.trim().replace(/\D/g,'');
+    document.getElementById('remito-input').value = remito;
     if(!remito){ document.getElementById('err-remito').style.display='block'; return; }
 
     const now = new Date();
@@ -686,31 +714,38 @@
     if(tabId==='tab-historial') renderHistorial();
   };
 
-  // al cambiar filtro turnos también necesitamos la key de Firebase
-  // reescribir renderTurnos para incluir _key en cada item
-  if(unsubTurnos) unsubTurnos();
-  unsubTurnos=onValue(ref(db,'turnos/'+dateStr(new Date())),snap=>{
-    // solo si tab-turnos está visible
-    const filtro=document.getElementById('filtro-turno')?.value||'all';
-    const cont=document.getElementById('lista-turnos');
-    if(!cont) return;
-    const todos=snap.exists()?Object.entries(snap.val()).map(([k,v])=>({...v,_key:k})):[];
-    const fil=filtro==='all'?todos:todos.filter(x=>String(x.turnoIdx)===filtro);
-    if(fil.length===0){ cont.innerHTML='<div class="empty">Sin turnos registrados hoy.</div>'; return; }
-    fil.sort((a,b)=>a.turnoIdx-b.turnoIdx);
-    cont.innerHTML=fil.map(x=>{
-      const t=TURNOS_DEF[x.turnoIdx];
-      const entregado=x.entregado;
-      return `<div class="turno-row" style="${entregado?'opacity:0.55':''}>
-        <div style="flex:1;">
-          <div style="font-weight:500;">${x.facturado||'—'}</div>
-          <div style="color:var(--text-secondary);font-size:12px;">Pedido ${x.comp}${x.retira?' · Retira: '+x.retira:''} · ${t.label}</div>
-          ${entregado?`<div style="font-size:11px;color:var(--success);margin-top:2px;">✓ Entregado ${x.horaEntrega} hs · Remito ${x.remito}</div>`:''}
-        </div>
-        ${!entregado?`<button onclick="window._entregar('${x._key}')" style="background:var(--accent);color:white;border:none;border-radius:6px;padding:6px 10px;font-size:12px;font-family:inherit;cursor:pointer;white-space:nowrap;margin-left:8px;">Entregar</button>`:`<span class="badge" style="margin-left:8px;">✓</span>`}
-      </div>`;
-    }).join('');
-  });
+  // Listener en tiempo real para turnos del día con keys correctas
+  function suscribirTurnos(){
+    if(unsubTurnos) unsubTurnos();
+    const hoy = dateStr(new Date());
+    unsubTurnos = onValue(ref(db,'turnos/'+hoy), snap=>{
+      const filtro = document.getElementById('filtro-turno')?.value||'all';
+      const cont = document.getElementById('lista-turnos');
+      if(!cont) return;
+      const todos = snap.exists()
+        ? Object.entries(snap.val()).map(([k,v])=>({...v, _key:k}))
+        : [];
+      const fil = filtro==='all' ? todos : todos.filter(x=>String(x.turnoIdx)===filtro);
+      if(fil.length===0){ cont.innerHTML='<div class="empty">Sin turnos registrados hoy.</div>'; return; }
+      fil.sort((a,b)=>a.turnoIdx-b.turnoIdx);
+      cont.innerHTML = fil.map(x=>{
+        const t = TURNOS_DEF[x.turnoIdx];
+        const entregado = !!x.entregado;
+        const keyEsc = x._key.replace(/['"]/g,'');
+        return '<div class="turno-row" style="'+(entregado?'opacity:0.55':'')+'">'
+          +'<div style="flex:1;">'
+          +'<div style="font-weight:500;">'+(x.facturado||'—')+'</div>'
+          +'<div style="color:var(--text-secondary);font-size:12px;">Pedido '+x.comp+(x.retira?' · Retira: '+x.retira:'')+' · '+t.label+'</div>'
+          +(entregado?'<div style="font-size:11px;color:var(--success);margin-top:2px;">✓ Entregado '+x.horaEntrega+' hs · Remito '+x.remito+'</div>':'')
+          +'</div>'
+          +(!entregado
+            ? '<button onclick="window._entregar(''+keyEsc+'')" style="background:var(--accent);color:white;border:none;border-radius:6px;padding:6px 10px;font-size:12px;font-family:inherit;cursor:pointer;white-space:nowrap;margin-left:8px;">Entregar</button>'
+            : '<span class="badge" style="margin-left:8px;">✓</span>')
+          +'</div>';
+      }).join('');
+    });
+  }
+  suscribirTurnos();
 
   buildDias();
 </script>
