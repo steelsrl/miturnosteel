@@ -325,9 +325,8 @@
       dT.setDate(dT.getDate()-1);
       const dA = dateStr(dT);
       if(h === dA){
-        // Es el día anterior: disponible solo entre 15:00 y 16:45
-        if(ahora < 15*60) return true;
-        if(ahora >= 16*60+45) return true;
+        // Es el día anterior: disponible hasta las 15:00
+        if(ahora >= 15*60) return true;
         return false;
       }
       // Para cualquier otro día futuro (pasado mañana en adelante): disponible
