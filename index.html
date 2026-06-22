@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Steel SRL – Retiro de mercadería</title>
+  <title>Mi Turno Steel</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -86,6 +86,9 @@
     .resumen-lbl { font-size: 11px; color: var(--text-hint); margin-top: 2px; }
     .hist-row { padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
     .hist-row:last-child { border-bottom: none; }
+    .comp-item { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 8px; position: relative; }
+    .comp-item-num { font-size: 11px; font-weight: 600; color: var(--text-hint); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+    .comp-remove { background: none; border: none; cursor: pointer; color: var(--danger); font-size: 16px; padding: 0; line-height: 1; font-family: inherit; }
     footer { margin-top: 2.5rem; font-size: 11px; color: var(--text-hint); text-align: center; }
   </style>
 </head>
@@ -103,23 +106,14 @@
     <div id="screen-client" class="screen active">
       <div id="client-form">
         <div class="card">
-          <div class="step-label">Paso 1 — Datos del pedido</div>
+          <div class="step-label">Paso 1 — Comprobantes a retirar</div>
           <div class="hint-box">
             <svg viewBox="0 0 24 24"><path d="M3 9h18M3 15h18M8 3v18M16 3v18M3 3h18v18H3z"/></svg>
             <p>Ingresá el número que aparece al <strong>final de tu factura, junto al código de barras</strong>.</p>
           </div>
-          <label>Número de pedido</label>
-          <input type="text" id="comp-input" placeholder="Ej: 123456" inputmode="numeric" autocomplete="off" />
-          <p class="msg-err" id="err-comp">Ingresá el número de pedido.</p>
-          <div class="field-gap">
-            <label>Facturado a</label>
-            <input type="text" id="facturado-input" placeholder="Nombre en la factura" autocomplete="off" />
-            <p class="msg-err" id="err-facturado">Ingresá el nombre en la factura.</p>
-          </div>
-          <div class="field-gap">
-            <label>Retirado por <span style="color:var(--text-hint);font-size:11px;">(opcional)</span></label>
-            <input type="text" id="retira-input" placeholder="Nombre de quien viene a retirar" autocomplete="off" />
-          </div>
+          <div id="comprobantes-lista"></div>
+          <button type="button" onclick="agregarComprobante()" style="margin-top:10px;width:100%;padding:9px;background:transparent;border:1px dashed var(--accent);border-radius:var(--radius-sm);color:var(--accent);font-size:13px;font-family:inherit;cursor:pointer;">+ Agregar otro comprobante</button>
+          <p class="msg-err" id="err-comp">Completá al menos un comprobante con número y nombre.</p>
         </div>
         <div class="card">
           <div class="step-label">Paso 2 — Elegí el día</div>
@@ -146,9 +140,7 @@
           <div class="res-tip">Pasá a retirarlo dentro de la franja horaria seleccionada.</div>
         </div>
         <div class="card">
-          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:4px;">Pedido n.º <strong id="res-comp" style="color:var(--text-primary);"></strong></div>
-          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:4px;">Facturado a: <strong id="res-facturado" style="color:var(--text-primary);"></strong></div>
-          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px;">Retira: <strong id="res-retira" style="color:var(--text-primary);"></strong></div>
+          <div id="res-comprobantes" style="margin-bottom:10px;"></div>
           <div style="font-size:13px;color:var(--text-secondary);line-height:1.6;">Tu pedido estará listo al final del turno. Pasá a retirarlo por el galpón, 25 de Mayo 2024.</div>
           <button class="wsp-btn" onclick="compartirWsp()">
             <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
@@ -414,13 +406,23 @@
   };
 
   async function confirmarTurno(){
-    const comp = document.getElementById('comp-input').value.trim();
-    const facturado = document.getElementById('facturado-input').value.trim();
-    const retira = document.getElementById('retira-input').value.trim();
+    ['err-comp','err-dia','err-turno'].forEach(id=>document.getElementById(id).style.display='none');
     let ok = true;
-    ['err-comp','err-facturado','err-dia','err-turno'].forEach(id=>document.getElementById(id).style.display='none');
-    if(!comp){ document.getElementById('err-comp').style.display='block'; ok=false; }
-    if(!facturado){ document.getElementById('err-facturado').style.display='block'; ok=false; }
+
+    // Recolectar comprobantes
+    const items = document.querySelectorAll('.comp-item');
+    const comprobantes = [];
+    let errComp = false;
+    items.forEach(item=>{
+      const comp = item.querySelector('.input-comp').value.trim();
+      const facturado = item.querySelector('.input-facturado').value.trim();
+      const retira = item.querySelector('.input-retira').value.trim();
+      if(comp && facturado) comprobantes.push({ comp, facturado, retira });
+      else errComp = true;
+    });
+    if(comprobantes.length===0 || errComp){
+      document.getElementById('err-comp').style.display='block'; ok=false;
+    }
     if(!selDia){ document.getElementById('err-dia').style.display='block'; ok=false; }
     if(selTurno===null){ document.getElementById('err-turno').style.display='block'; ok=false; }
     if(!ok) return;
@@ -428,17 +430,27 @@
     const tRef = ref(db,'turnos/'+selDia);
     const snap = await get(tRef);
     const existing = snap.exists()?Object.values(snap.val()):[];
-    if(!existing.find(x=>x.comp===comp && x.turnoIdx===selTurno)){
-      await push(tRef,{ comp, facturado, retira, turnoIdx:selTurno, ts:new Date().toISOString() });
+    for(const c of comprobantes){
+      if(!existing.find(x=>x.comp===c.comp && x.turnoIdx===selTurno)){
+        await push(tRef,{ comp:c.comp, facturado:c.facturado, retira:c.retira, turnoIdx:selTurno, ts:new Date().toISOString() });
+      }
     }
 
     const t = TURNOS_DEF[selTurno];
     document.getElementById('res-hora').textContent = t.label;
     document.getElementById('res-dia').textContent = fechaLarga(selDia);
-    document.getElementById('res-comp').textContent = comp;
-    document.getElementById('res-facturado').textContent = facturado;
-    document.getElementById('res-retira').textContent = retira||'—';
-    window._ta = { comp, facturado, retira, dia:selDia, turnoLabel:t.label };
+
+    // Mostrar lista de comprobantes en resultado
+    const resDiv = document.getElementById('res-comprobantes');
+    resDiv.innerHTML = comprobantes.map((c,i)=>
+      '<div style="padding:8px 0;border-bottom:1px solid var(--border);">'
+      +'<div style="font-size:13px;color:var(--text-secondary);">Pedido n.º <strong style="color:var(--text-primary);">'+c.comp+'</strong></div>'
+      +'<div style="font-size:13px;color:var(--text-secondary);">Facturado a: <strong style="color:var(--text-primary);">'+c.facturado+'</strong></div>'
+      +(c.retira?'<div style="font-size:13px;color:var(--text-secondary);">Retira: <strong style="color:var(--text-primary);">'+c.retira+'</strong></div>':'')
+      +'</div>'
+    ).join('') + '<div style="font-size:12px;color:var(--text-secondary);margin-top:6px;">'+comprobantes.length+' comprobante'+(comprobantes.length>1?'s':'')+'</div>';
+
+    window._ta = { comprobantes, dia:selDia, turnoLabel:t.label };
 
     document.getElementById('client-form').style.display='none';
     document.getElementById('client-result').style.display='block';
@@ -447,12 +459,12 @@
   async function compartirWsp(){
     const d = window._ta; if(!d) return;
     const wspNum = await getWspNum();
-    const retiraStr = d.retira ? '\nRetirado por: *'+d.retira+'*' : '';
+    const listaComps = d.comprobantes.map((c,i)=>
+      '📦 Pedido *'+c.comp+'* – '+c.facturado+(c.retira?' (retira: '+c.retira+')':'')
+    ).join('\n');
     const txt = '✅ *Steel SRL – Retiro de mercadería*'
-      +'\n\nPedido n.º: *'+d.comp+'*'
-      +'\nFacturado a: *'+d.facturado+'*'
-      +retiraStr
-      +'\nDía: '+fechaLarga(d.dia)
+      +'\n\n'+listaComps
+      +'\n\nDía: '+fechaLarga(d.dia)
       +'\nFranja horaria: *'+d.turnoLabel+'*'
       +'\n\nPasá a buscar tu pedido dentro de la franja horaria solicitada.'
       +'\n📍 Retirá por galpón, 25 de Mayo 2024.'
@@ -463,11 +475,11 @@
 
   async function resetCliente(){
     selDia=null; selTurno=null;
-    ['comp-input','facturado-input','retira-input'].forEach(id=>document.getElementById(id).value='');
     document.getElementById('client-form').style.display='block';
     document.getElementById('client-result').style.display='none';
     document.getElementById('card-turnos').classList.add('card-disabled');
     document.querySelectorAll('.dia-btn').forEach(b=>b.classList.remove('selected'));
+    initComprobantes();
     await buildDias();
   }
 
@@ -661,6 +673,50 @@
   window.renderHistorial=renderHistorial; window.agregarFeriado=agregarFeriado;
   window.guardarWspNumber=guardarWspNumber; window.cambiarPass=cambiarPass;
 
+  // ── Comprobantes múltiples ───────────────────────────────────
+  let compCount = 0;
+
+  function crearItemComp(idx){
+    const div = document.createElement('div');
+    div.className = 'comp-item';
+    div.id = 'comp-item-'+idx;
+    div.innerHTML = '<div class="comp-item-num">'
+      +'<span>Comprobante '+(idx+1)+'</span>'
+      +(idx>0?'<button class="comp-remove" onclick="quitarComprobante('+idx+')" title="Quitar">×</button>':'')
+      +'</div>'
+      +'<label>Número de pedido</label>'
+      +'<input type="text" class="input-comp" placeholder="Ej: 123456" inputmode="numeric" autocomplete="off" style="margin-bottom:8px;" />'
+      +'<label style="margin-top:4px;">Facturado a</label>'
+      +'<input type="text" class="input-facturado" placeholder="Nombre en la factura" autocomplete="off" style="margin-bottom:8px;" />'
+      +'<label style="margin-top:4px;">Retirado por <span style="color:var(--text-hint);font-size:11px;">(opcional)</span></label>'
+      +'<input type="text" class="input-retira" placeholder="Nombre de quien retira" autocomplete="off" />';
+    return div;
+  }
+
+  function initComprobantes(){
+    compCount = 0;
+    const lista = document.getElementById('comprobantes-lista');
+    lista.innerHTML = '';
+    lista.appendChild(crearItemComp(compCount));
+    compCount = 1;
+  }
+
+  window.agregarComprobante = function(){
+    const lista = document.getElementById('comprobantes-lista');
+    if(lista.querySelectorAll('.comp-item').length >= 2){
+      alert('Máximo 2 comprobantes por turno.');
+      return;
+    }
+    lista.appendChild(crearItemComp(compCount));
+    compCount++;
+  };
+
+  window.quitarComprobante = function(idx){
+    const el = document.getElementById('comp-item-'+idx);
+    if(el) el.remove();
+  };
+
+  initComprobantes();
   buildDias();
 </script>
 </body>
