@@ -543,14 +543,24 @@
       let totalActual = 0;
       diasOrdenados.forEach(dia=>{ totalActual += dias[dia].length; });
       if(_prevCount !== null && totalActual > _prevCount){
-        // Nuevo turno detectado: notificar en pestaña
-        const orig = document.title;
-        let blink = 0;
-        const iv = setInterval(()=>{
-          document.title = blink%2===0 ? '🔔 Nuevo turno!' : orig;
-          blink++;
-          if(blink>10){ clearInterval(iv); document.title=orig; }
-        }, 600);
+        // Nuevo turno detectado: parpadeo permanente hasta que el usuario vea la pestaña
+        if(!window._blinkInterval){
+          const orig = document.title;
+          let blink = 0;
+          window._blinkInterval = setInterval(()=>{
+            document.title = blink%2===0 ? '🔔 Nuevo turno!' : orig;
+            blink++;
+          }, 800);
+          // Detener cuando el usuario vuelve a la pestaña
+          const stopBlink = ()=>{
+            if(window._blinkInterval){ clearInterval(window._blinkInterval); window._blinkInterval=null; }
+            document.title = orig;
+            document.removeEventListener('visibilitychange', stopBlink);
+            window.removeEventListener('focus', stopBlink);
+          };
+          document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) stopBlink(); });
+          window.addEventListener('focus', stopBlink);
+        }
         // Notificación del sistema si está habilitada
         if(Notification.permission==='granted'){
           new Notification('Mi Turno Steel', { body: 'Nuevo turno registrado', icon: '' });
