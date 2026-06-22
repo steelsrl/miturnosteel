@@ -322,8 +322,9 @@
     const h = hoy();
     const t = TURNOS_DEF[ti];
     if(ds === h){
-      if(ti === 3) return ahora >= 15*60;
-      return ahora >= (t.inicio - 2*60);
+      if(ti === 0) return ahora >= (t.inicio - 2*60);   // 8:30 → bloquear 2hs antes (6:30)
+      if(ti === 3) return ahora >= 15*60;                // 14:30-16:30 → bloquear a las 15:00
+      return ahora >= (t.inicio - 30);                   // 10:30, 12:30, 14:30 → 30 min antes
     }
     if(ti === 0){
       const dT = new Date(ds+'T12:00:00');
@@ -498,6 +499,8 @@
 
   // ADMIN
   async function initAdmin(){
+    // Pedir permiso para notificaciones del navegador
+    if(Notification.permission === 'default') Notification.requestPermission();
     const now=new Date();
     document.getElementById('admin-fecha').textContent=fechaLarga(hoy())+' – '+pad(now.getHours())+':'+pad(now.getMinutes())+' hs';
     suscribirTurnos();
@@ -520,8 +523,9 @@
     const filtro=document.getElementById('filtro-turno')?.value||'all';
     const cont=document.getElementById('lista-turnos');
     cont.innerHTML='<div class="loading">Cargando...</div>';
+    let _prevCount = null;
     unsubTurnos=onValue(ref(db,'turnos'),snap=>{
-      if(!snap.exists()){ cont.innerHTML='<div class="empty">Sin turnos registrados.</div>'; return; }
+      if(!snap.exists()){ cont.innerHTML='<div class="empty">Sin turnos registrados.</div>'; _prevCount=0; return; }
       const hoyStr=hoy();
       // Agrupar por día desde hoy en adelante
       const dias={};
@@ -533,6 +537,24 @@
         if(fil.length>0) dias[dia]=fil;
       });
       const diasOrdenados=Object.keys(dias).sort();
+      // Contar turnos totales para detectar nuevos
+      let totalActual = 0;
+      diasOrdenados.forEach(dia=>{ totalActual += dias[dia].length; });
+      if(_prevCount !== null && totalActual > _prevCount){
+        // Nuevo turno detectado: notificar en pestaña
+        const orig = document.title;
+        let blink = 0;
+        const iv = setInterval(()=>{
+          document.title = blink%2===0 ? '🔔 Nuevo turno!' : orig;
+          blink++;
+          if(blink>10){ clearInterval(iv); document.title=orig; }
+        }, 600);
+        // Notificación del sistema si está habilitada
+        if(Notification.permission==='granted'){
+          new Notification('Mi Turno Steel', { body: 'Nuevo turno registrado', icon: '' });
+        }
+      }
+      _prevCount = totalActual;
       if(!diasOrdenados.length){ cont.innerHTML='<div class="empty">Sin turnos pendientes.</div>'; return; }
       cont.innerHTML=diasOrdenados.map(dia=>{
         const esHoyDia=dia===hoyStr;
