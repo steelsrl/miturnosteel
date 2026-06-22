@@ -97,7 +97,7 @@
     <div class="logo-icon">
       <svg viewBox="0 0 24 24"><path d="M5 8h14M5 8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v.01a2 2 0 0 1-2 2M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8"/><path d="m10 12 2 2 4-4"/></svg>
     </div>
-    <div class="logo-text"><h1>Steel SRL</h1><p>Retiro de mercadería por local</p></div>
+    <div class="logo-text"><h1>Steel SRL</h1><p>Reserva tu turno de retiro de mercadería</p></div>
   </div>
 
   <div class="container">
@@ -312,20 +312,26 @@
     const ahora = ahoraMin();
     const h = hoy();
     const t = TURNOS_DEF[ti];
+
+    // Hoy: bloquear según hora actual
     if(ds === h){
       if(ti === 3) return ahora >= 15*60;
       return ahora >= (t.inicio - 2*60);
     }
+
+    // Días futuros: solo aplica restricción al primer turno (8:30)
     if(ti === 0){
       const dT = new Date(ds+'T12:00:00');
       dT.setDate(dT.getDate()-1);
       const dA = dateStr(dT);
       if(h === dA){
+        // Es el día anterior: disponible solo entre 15:00 y 16:45
         if(ahora < 15*60) return true;
         if(ahora >= 16*60+45) return true;
-      } else {
-        return true;
+        return false;
       }
+      // Para cualquier otro día futuro (pasado mañana en adelante): disponible
+      return false;
     }
     return false;
   }
@@ -520,7 +526,7 @@
         return '<div class="turno-row" style="'+(entregado?'opacity:0.55':'')+'">'
           +'<div style="flex:1;min-width:0;">'
           +'<div style="font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+(x.facturado||'—')+'</div>'
-          +'<div style="color:var(--text-secondary);font-size:12px;">Pedido '+x.comp+(x.retira?' · '+x.retira:'')+' · '+t.label+'</div>'
+          +'<div style="color:var(--text-secondary);font-size:12px;">Pedido '+x.comp+(x.retira?' · '+x.retira:'')+' · '+t.label+' · '+fechaLarga(hoy())+'</div>'
           +(entregado?'<div style="font-size:11px;color:var(--success);margin-top:2px;">✓ '+x.horaEntrega+' hs · Remito '+x.remito+'</div>':'')
           +'</div>'
           +(!entregado
@@ -533,8 +539,10 @@
 
   // Entregar
   let _keyEntrega = null;
-  window._abrirEntrega = function(k){
+  let _diaEntrega = null;
+  window._abrirEntrega = function(k, dia){
     _keyEntrega = k;
+    _diaEntrega = dia || hoy();
     document.getElementById('remito-input').value='';
     document.getElementById('err-remito').style.display='none';
     document.getElementById('modal-entregar').style.display='flex';
@@ -547,7 +555,7 @@
     if(!remito){ document.getElementById('err-remito').style.display='block'; return; }
     const now = new Date();
     const hora = pad(now.getHours())+':'+pad(now.getMinutes());
-    const dia = hoy();
+    const dia = _diaEntrega || hoy();
     const snap = await get(ref(db,'turnos/'+dia+'/'+_keyEntrega));
     if(!snap.exists()){ cerrarModalEntregar(); return; }
     const turno = snap.val();
