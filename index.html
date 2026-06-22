@@ -322,15 +322,17 @@
     const h = hoy();
     const t = TURNOS_DEF[ti];
     if(ds === h){
-      if(ti === 0) return ahora >= (t.inicio - 2*60);   // 8:30 → bloquear 2hs antes (6:30)
+      if(ti === 0) return true;                          // 8:30 de hoy → siempre bloqueado (solo se reserva el día anterior)
       if(ti === 3) return ahora >= 15*60;                // 14:30-16:30 → bloquear a las 15:00
-      return ahora >= (t.inicio - 30);                   // 10:30, 12:30, 14:30 → 30 min antes
+      return ahora >= (t.inicio - 30);                   // 10:30, 12:30 → 30 min antes
     }
     if(ti === 0){
+      // Turno 8:30 del día siguiente: disponible todo el día anterior hasta las 16:45
       const dT = new Date(ds+'T12:00:00');
       dT.setDate(dT.getDate()-1);
       const dA = dateStr(dT);
-      if(h === dA) return ahora >= 15*60;
+      if(h === dA) return ahora >= 16*60+45;             // bloquear después de las 16:45
+      if(h < dA) return true;                            // días muy futuros: disponible
     }
     return false;
   }
