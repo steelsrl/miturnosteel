@@ -97,6 +97,21 @@
     .hist-row { padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
     .hist-row:last-child { border-bottom: none; }
     footer { margin-top: 2.5rem; font-size: 11px; color: var(--text-hint); text-align: center; }
+
+    /* Botón avisar pedido listo */
+    .btn-avisar {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: #25D366; color: white; border: none;
+      border-radius: 6px; padding: 6px 10px; font-size: 12px;
+      font-family: inherit; cursor: pointer; white-space: nowrap; flex-shrink: 0;
+    }
+    .btn-avisar svg { width: 13px; height: 13px; fill: white; flex-shrink: 0; }
+    .btn-avisar.avisado {
+      background: var(--success-light); color: var(--success);
+      border: 1px solid var(--success-border); cursor: default;
+    }
+    .btn-avisar.avisado svg { fill: var(--success); }
+    .turno-acciones { display: flex; gap: 6px; align-items: center; margin-left: 8px; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; }
   </style>
 </head>
 <body>
@@ -122,13 +137,21 @@
           <button type="button" onclick="agregarComprobante()" style="margin-top:10px;width:100%;padding:9px;background:transparent;border:1px dashed var(--accent);border-radius:var(--radius-sm);color:var(--accent);font-size:13px;font-family:inherit;cursor:pointer;">+ Agregar otro comprobante</button>
           <p class="msg-err" id="err-comp">Completá al menos un comprobante con número y nombre.</p>
         </div>
+
         <div class="card">
-          <div class="step-label">Paso 2 — Elegí el día</div>
+          <div class="step-label">Paso 2 — Tu celular de contacto</div>
+          <label>Número de celular <span style="color:var(--text-hint);font-size:11px;">(para avisarte cuando el pedido esté listo)</span></label>
+          <input type="text" id="input-telefono" placeholder="Ej: 2664 123456" inputmode="numeric" autocomplete="tel" />
+          <p class="msg-err" id="err-telefono">Ingresá un número de celular válido (mínimo 8 dígitos).</p>
+        </div>
+
+        <div class="card">
+          <div class="step-label">Paso 3 — Elegí el día</div>
           <div class="dias-grid" id="dias-grid"><div class="loading">Cargando...</div></div>
           <p class="msg-err" id="err-dia">Seleccioná un día para continuar.</p>
         </div>
         <div class="card card-disabled" id="card-turnos">
-          <div class="step-label">Paso 3 — Elegí la franja horaria de retiro</div>
+          <div class="step-label">Paso 4 — Elegí la franja horaria de retiro</div>
           <div class="turnos-grid" id="turnos-grid"></div>
           <p class="msg-err" id="err-turno">Seleccioná una franja horaria disponible.</p>
         </div>
@@ -322,17 +345,16 @@
     const h = hoy();
     const t = TURNOS_DEF[ti];
     if(ds === h){
-      if(ti === 0) return true;                          // 8:30 de hoy → siempre bloqueado (solo se reserva el día anterior)
-      if(ti === 3) return ahora >= 15*60;                // 14:30-16:30 → bloquear a las 15:00
-      return ahora >= (t.inicio - 30);                   // 10:30, 12:30 → 30 min antes
+      if(ti === 0) return true;
+      if(ti === 3) return ahora >= 15*60;
+      return ahora >= (t.inicio - 60);                   // 60 min antes
     }
     if(ti === 0){
-      // Turno 8:30 del día siguiente: disponible todo el día anterior hasta las 16:45
       const dT = new Date(ds+'T12:00:00');
       dT.setDate(dT.getDate()-1);
       const dA = dateStr(dT);
-      if(h === dA) return ahora >= 16*60+45;             // bloquear después de las 16:45
-      if(h < dA) return true;                            // días muy futuros: disponible
+      if(h === dA) return ahora >= 16*60+45;
+      if(h < dA) return true;
     }
     return false;
   }
@@ -442,7 +464,7 @@
   window.quitarComp = function(idx){ const el=document.getElementById('comp-item-'+idx); if(el) el.remove(); };
 
   async function confirmarTurno(){
-    ['err-comp','err-dia','err-turno'].forEach(id=>document.getElementById(id).style.display='none');
+    ['err-comp','err-telefono','err-dia','err-turno'].forEach(id=>document.getElementById(id).style.display='none');
     const items = document.querySelectorAll('.comp-item');
     const comprobantes = [];
     let errComp = false;
@@ -454,6 +476,12 @@
       else errComp=true;
     });
     if(comprobantes.length===0||errComp){ document.getElementById('err-comp').style.display='block'; return; }
+
+    // Validar teléfono (mínimo 8 dígitos)
+    const telRaw = document.getElementById('input-telefono').value.trim();
+    const telDigits = telRaw.replace(/\D/g,'');
+    if(telDigits.length < 8){ document.getElementById('err-telefono').style.display='block'; return; }
+
     if(!selDia){ document.getElementById('err-dia').style.display='block'; return; }
     if(selTurno===null){ document.getElementById('err-turno').style.display='block'; return; }
 
@@ -462,7 +490,11 @@
     const existing=snap.exists()?Object.values(snap.val()):[];
     for(const c of comprobantes){
       if(!existing.find(x=>x.comp===c.comp&&x.turnoIdx===selTurno)){
-        await push(tRef,{comp:c.comp,facturado:c.facturado,retira:c.retira,turnoIdx:selTurno,ts:new Date().toISOString()});
+        await push(tRef,{
+          comp:c.comp, facturado:c.facturado, retira:c.retira,
+          telefono: telDigits,
+          turnoIdx:selTurno, ts:new Date().toISOString()
+        });
       }
     }
     const t=TURNOS_DEF[selTurno];
@@ -495,13 +527,43 @@
     document.getElementById('client-result').style.display='none';
     document.getElementById('card-turnos').classList.add('card-disabled');
     document.querySelectorAll('.dia-btn').forEach(b=>b.classList.remove('selected'));
+    document.getElementById('input-telefono').value='';
     initComprobantes();
     await buildDias();
   }
 
+  // ── AVISAR PEDIDO LISTO POR WHATSAPP ────────────────────────────────────────
+  const WSP_ICON = '<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>';
+
+  window._avisarPedidoListo = async function(key, dia) {
+    const snap = await get(ref(db, 'turnos/'+dia+'/'+key));
+    if(!snap.exists()) return;
+    const x = snap.val();
+    const tel = x.telefono;
+    if(!tel){ alert('Este pedido no tiene teléfono registrado.'); return; }
+
+    const t = TURNOS_DEF[x.turnoIdx];
+    const msg =
+      '✅ *Steel SRL* — Tu pedido está listo para retirar.\n\n'
+      + '📦 Pedido N° *' + x.comp + '*\n'
+      + (x.facturado ? 'Facturado a: ' + x.facturado + '\n' : '')
+      + '\nPasá a buscarlo por el galpón (25 de Mayo 2024) '
+      + 'dentro de tu franja horaria: *' + t.label + '*.\n\n'
+      + '🔧 Si tenés material de ferretería, pasá por el local de la esquina.';
+
+    // Registrar aviso en Firebase
+    await fbSet('turnos/'+dia+'/'+key+'/avisado', true);
+    await fbSet('turnos/'+dia+'/'+key+'/tsAviso', new Date().toISOString());
+
+    // Abrir WhatsApp con número del cliente (prefijo 549 para Argentina)
+    const numFinal = tel.startsWith('549') ? tel : '549'+tel;
+    const url = 'https://wa.me/'+numFinal+'?text='+encodeURIComponent(msg);
+    window.open(url, '_blank');
+  };
+  // ────────────────────────────────────────────────────────────────────────────
+
   // ADMIN
   async function initAdmin(){
-    // Pedir permiso para notificaciones del navegador
     if(Notification.permission === 'default') Notification.requestPermission();
     const now=new Date();
     document.getElementById('admin-fecha').textContent=fechaLarga(hoy())+' – '+pad(now.getHours())+':'+pad(now.getMinutes())+' hs';
@@ -529,7 +591,6 @@
     unsubTurnos=onValue(ref(db,'turnos'),snap=>{
       if(!snap.exists()){ cont.innerHTML='<div class="empty">Sin turnos registrados.</div>'; _prevCount=0; return; }
       const hoyStr=hoy();
-      // Agrupar por día desde hoy en adelante
       const dias={};
       snap.forEach(diaSnap=>{
         const dia=diaSnap.key;
@@ -539,11 +600,9 @@
         if(fil.length>0) dias[dia]=fil;
       });
       const diasOrdenados=Object.keys(dias).sort();
-      // Contar turnos totales para detectar nuevos
       let totalActual = 0;
       diasOrdenados.forEach(dia=>{ totalActual += dias[dia].length; });
       if(_prevCount !== null && totalActual > _prevCount){
-        // Nuevo turno detectado: parpadeo permanente hasta que el usuario vea la pestaña
         if(!window._blinkInterval){
           const orig = document.title;
           let blink = 0;
@@ -551,7 +610,6 @@
             document.title = blink%2===0 ? '🔔 Nuevo turno!' : orig;
             blink++;
           }, 800);
-          // Detener cuando el usuario vuelve a la pestaña
           const stopBlink = ()=>{
             if(window._blinkInterval){ clearInterval(window._blinkInterval); window._blinkInterval=null; }
             document.title = orig;
@@ -561,7 +619,6 @@
           document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) stopBlink(); });
           window.addEventListener('focus', stopBlink);
         }
-        // Notificación del sistema si está habilitada
         if(Notification.permission==='granted'){
           new Notification('Mi Turno Steel', { body: 'Nuevo turno registrado', icon: '' });
         }
@@ -577,15 +634,34 @@
           +turnos.map(x=>{
             const t=TURNOS_DEF[x.turnoIdx];
             const entregado=!!x.entregado;
+            const avisado=!!x.avisado;
+            const tieneTel=!!x.telefono;
+
+            // Construir botón de aviso
+            let btnAvisar = '';
+            if(!entregado){
+              if(avisado){
+                btnAvisar = '<button class="btn-avisar avisado" disabled>'
+                  + WSP_ICON + ' Avisado</button>';
+              } else if(tieneTel){
+                btnAvisar = '<button class="btn-avisar" onclick="window._avisarPedidoListo(\''+x._key+'\',\''+dia+'\')">'
+                  + WSP_ICON + ' Avisar listo</button>';
+              }
+            }
+
             return '<div class="turno-row" style="'+(entregado?'opacity:0.55':'')+'">'
               +'<div style="flex:1;min-width:0;">'
               +'<div style="font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+(x.facturado||'—')+'</div>'
               +'<div style="color:var(--text-secondary);font-size:12px;">Pedido '+x.comp+(x.retira?' · Retira: '+x.retira:'')+' · '+t.label+'</div>'
+              +(tieneTel?'<div style="font-size:11px;color:var(--text-hint);">📱 '+x.telefono+'</div>':'')
               +(entregado?'<div style="font-size:11px;color:var(--success);margin-top:2px;">✓ '+x.horaEntrega+' hs · Remito '+x.remito+'</div>':'')
               +'</div>'
+              +'<div class="turno-acciones">'
+              + btnAvisar
               +(!entregado
-                ?'<button onclick="window._abrirEntrega(\''+x._key+'\',\''+dia+'\')" style="margin-left:8px;background:var(--accent);color:white;border:none;border-radius:6px;padding:6px 10px;font-size:12px;font-family:inherit;cursor:pointer;white-space:nowrap;flex-shrink:0;">Entregar</button>'
-                :'<span class="badge" style="margin-left:8px;flex-shrink:0;">✓</span>')
+                ?'<button onclick="window._abrirEntrega(\''+x._key+'\',\''+dia+'\')" style="background:var(--accent);color:white;border:none;border-radius:6px;padding:6px 10px;font-size:12px;font-family:inherit;cursor:pointer;white-space:nowrap;">Entregar</button>'
+                :'<span class="badge">✓</span>')
+              +'</div>'
               +'</div>';
           }).join('')
           +'</div></div>';
