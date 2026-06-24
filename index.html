@@ -175,7 +175,7 @@
           Confirmar turno
         </button>
         <div class="mt2 center"><span class="small-link" onclick="window.showAdmin()">  Acceso administración →</span></div>
-        <div class="mt1 center"><span class="small-link" onclick="window.showScreen('screen-ventas')">Acceso ventas →</span></div>
+        <div class="mt1 center"><span class="small-link" onclick="window.showScreen('screen-login-ventas')">Acceso ventas →</span></div>
       </div>
 
       <div id="client-result" style="display:none;">
@@ -283,6 +283,18 @@
         </div>
       </div>
     </div>
+    <!-- LOGIN VENTAS -->
+    <div id="screen-login-ventas" class="screen">
+      <div class="card">
+        <div style="font-size:15px;font-weight:600;margin-bottom:16px;">🔧 Acceso Ventas</div>
+        <label>Contraseña</label>
+        <input type="password" id="pass-ventas-input" placeholder="••••••••" />
+        <p class="msg-err" id="err-pass-ventas">Contraseña incorrecta.</p>
+        <button class="primary" style="margin-top:12px;" onclick="window.doLoginVentas()">Ingresar</button>
+        <div class="mt1 center"><span class="small-link" onclick="window.showScreen('screen-client')">← Volver al inicio</span></div>
+      </div>
+    </div>
+
     <!-- VENTAS -->
     <div id="screen-ventas" class="screen">
       <div class="ventas-header">
@@ -388,24 +400,31 @@
   async function fbSet(p,v){ await set(ref(db,p),v); }
   async function fbRemove(p){ await remove(ref(db,p)); }
   async function getConfig(){ return (await fbGet('config/limites'))||[5,5,5,5]; }
+  async function getMinutos(){ return (await fbGet('config/minutos'))||[0,60,60,0]; }
   async function getFeriados(){ const f=await fbGet('config/feriados'); return f?Object.values(f):[]; }
   async function getPass(){ return (await fbGet('config/pass'))||'admin123'; }
+  async function getPassVentas(){ return (await fbGet('config/passVentas'))||'admin123'; }
   async function getWspNum(){ return (await fbGet('config/wspNumber'))||''; }
 
-  function esBloqueado(ds, ti){
+  async function esBloqueado(ds, ti){
     const ahora = ahoraMin();
     const h = hoy();
     const t = TURNOS_DEF[ti];
+    const minutos = await getMinutos();
+    const mins = minutos[ti] !== undefined ? minutos[ti] : 60;
     if(ds === h){
-      if(ti === 0) return true;
-      if(ti === 3) return ahora >= 15*60;
-      return ahora >= (t.inicio - 60);                   // 60 min antes
+      if(ti === 0){
+        // 8:30 de hoy: solo reservable el día anterior
+        return true;
+      }
+      return ahora >= (t.inicio - mins);
     }
     if(ti === 0){
+      // 8:30 del día siguiente: reservable el día anterior hasta (inicio - mins) del día anterior
       const dT = new Date(ds+'T12:00:00');
       dT.setDate(dT.getDate()-1);
       const dA = dateStr(dT);
-      if(h === dA) return ahora >= 16*60+45;
+      if(h === dA) return ahora >= (16*60+45);
       if(h < dA) return true;
     }
     return false;
@@ -467,17 +486,18 @@
     const config = await getConfig();
     const snap = await get(ref(db,'turnos/'+ds));
     const todos = snap.exists()?Object.values(snap.val()):[];
-    grid.innerHTML = TURNOS_DEF.map((t,i)=>{
+    const rows = await Promise.all(TURNOS_DEF.map(async (t,i)=>{
       const ocupados = todos.filter(x=>x.turnoIdx===i).length;
       const lleno = ocupados>=config[i];
-      const bloq = esBloqueado(ds,i);
+      const bloq = await esBloqueado(ds,i);
       const noDisp = lleno||bloq;
       const cap = lleno?'Completo':(bloq?'No disponible':'');
       return '<div class="turno-btn'+(noDisp?' lleno':'')+'" onclick="window._selTurno('+i+',this)">'
         +'<div class="turno-hora">'+t.label+'</div>'
         +(cap?'<div class="turno-cap">'+cap+'</div>':'')
         +'</div>';
-    }).join('');
+    }));
+    grid.innerHTML = rows.join('');
   }
 
   window._selTurno = function(idx,el){
@@ -958,16 +978,22 @@
 
   async function renderConfig(){
     const config=await getConfig();
-    document.getElementById('slots-config').innerHTML=TURNOS_DEF.map((t,i)=>
-      '<div class="slot-row"><span>'+t.label+'</span>'
-      +'<div style="display:flex;align-items:center;gap:7px;">'
-      +'<span style="font-size:12px;color:var(--text-secondary);">máx.</span>'
-      +'<input type="number" min="1" max="99" value="'+config[i]+'" onchange="window._updSlot('+i+',this.value)" style="width:58px;text-align:center;" />'
-      +'<span style="font-size:12px;color:var(--text-secondary);">pedidos</span>'
-      +'</div></div>'
-    ).join('');
+    const minutos=await getMinutos();
+    document.getElementById('slots-config').innerHTML=TURNOS_DEF.map((t,i)=>{
+      return '<div class="slot-row" style="flex-wrap:wrap;gap:6px;">'
+        +'<span style="min-width:120px;">'+t.label+'</span>'
+        +'<div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;">'
+        +'<span style="font-size:12px;color:var(--text-secondary);">máx.</span>'
+        +'<input type="number" min="1" max="99" value="'+config[i]+'" onchange="window._updSlot('+i+',this.value)" style="width:52px;text-align:center;" />'
+        +'<span style="font-size:12px;color:var(--text-secondary);">pedidos</span>'
+        +'&nbsp;&nbsp;<span style="font-size:12px;color:var(--text-secondary);">bloquear</span>'
+        +'<input type="number" min="0" max="480" value="'+(minutos[i]||0)+'" onchange="window._updMinutos('+i+',this.value)" style="width:52px;text-align:center;" />'
+        +'<span style="font-size:12px;color:var(--text-secondary);">min antes</span>'
+        +'</div></div>';
+    }).join('');
   }
   window._updSlot=async function(i,v){ const c=await getConfig(); c[i]=parseInt(v)||1; await fbSet('config/limites',c); };
+  window._updMinutos=async function(i,v){ const m=await getMinutos(); m[i]=parseInt(v)||0; await fbSet('config/minutos',m); };
 
   async function renderFeriados(){
     const f=await getFeriados();
@@ -1020,7 +1046,19 @@
     alert('✓ Sistema reseteado correctamente.');
   };
 
-  window.showScreen=showScreen; window.showAdmin=showAdmin; window.doLogin=doLogin; window.doLogout=doLogout;
+  async function doLoginVentas(){
+    const v = document.getElementById('pass-ventas-input').value;
+    const passV = await getPassVentas();
+    if(v === passV){
+      document.getElementById('err-pass-ventas').style.display='none';
+      document.getElementById('pass-ventas-input').value='';
+      showScreen('screen-ventas');
+    } else {
+      document.getElementById('err-pass-ventas').style.display='block';
+    }
+  }
+
+  window.showScreen=showScreen; window.showAdmin=showAdmin; window.doLogin=doLogin; window.doLogout=doLogout; window.doLoginVentas=doLoginVentas;
   window.quitarComp=window.quitarComp||function(){}; // already set above via window.quitarComp=
   window.confirmarTurno=confirmarTurno; window.compartirWsp=compartirWsp; window.resetCliente=resetCliente;
   window.switchTab=switchTab; window.suscribirTurnos=suscribirTurnos;
